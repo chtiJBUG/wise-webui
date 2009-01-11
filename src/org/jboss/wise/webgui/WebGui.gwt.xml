@@ -1,0 +1,21 @@
+<module>
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+	<entry-point class='org.jboss.wise.webgui.client.WebGui' />
+
+	<source path="client" />
+	<source path="shared" />
+
+	<public path="public" />
+
+	<servlet path='/service'
+		class='org.jboss.wise.webgui.server.WebGuiServiceServlet' />
+
+	<stylesheet src='WebGui.css' />
+
+	<extend-property name="locale" values="en_US" />
+</module>

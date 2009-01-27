@@ -19,34 +19,32 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.wise.webgui.client.widgets;
+package org.jboss.wise.webgui.client;
 
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.ImageBundle;
+import com.google.gwt.i18n.client.LocalizableResource.DefaultLocale;
 
 /**
+ * Localized text messages used for wise web gui
+ * 
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
-public interface IconsBundle extends ImageBundle {
-    public AbstractImagePrototype open();
+@DefaultLocale("en")
+public interface Messages extends com.google.gwt.i18n.client.Constants {
 
-    public AbstractImagePrototype close();
+    public String wsdlListTitle();
 
-    public AbstractImagePrototype left();
+    public String colDescrTitle();
 
-    public AbstractImagePrototype right();
+    public String colLinkTitle();
 
-    public AbstractImagePrototype defaultSort();
+    public String colSavingDateTitle();
 
-    public AbstractImagePrototype down();
+    public String btnSummaryDetails();
 
-    public AbstractImagePrototype up();
+    public String btnEditTitle();
 
-    public AbstractImagePrototype defaultSortActive();
+    public String btnDeleteTitle();
 
-    public AbstractImagePrototype downActive();
+    public String msgRemoveWarning();
 
-    public AbstractImagePrototype upActive();
-
-    public AbstractImagePrototype waiting();
 }

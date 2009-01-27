@@ -49,8 +49,9 @@ import com.google.gwt.user.client.ui.Widget;
  * @todo TODO: use enumerations for align property
  * @todo TODO: let's configure the default align property for headers
  * @todo TODO: add sanity checks to parameters
- * @todo TODO: building of the widget DOM may be done using a builder object
- *       that visits the TreeGrid data tree
+ * @todo TODO: widget DOM may be created using a builder object that visits the
+ *       TreeGrid data tree
+ * @todo TODO: footer?
  * 
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
@@ -1381,12 +1382,15 @@ public class TreeGrid extends Composite {
 			Object d2 = o2.getData()[targetCol];
 			CellType ct = level.getBodyTypes().get(targetCol);
 			DataType dt = ct.getDataType();
-			cr = dt.getComparator().compare(d1, d2);
-			if (cr != 0) {
-			    if (info.getCurrentState() == SortState.Descending) {
-				cr = -cr;
+			Comparator<Object> cmp = dt.getComparator();
+			if (cmp != null) {
+			    cr = cmp.compare(d1, d2);
+			    if (cr != 0) {
+				if (info.getCurrentState() == SortState.Descending) {
+				    cr = -cr;
+				}
+				return cr;
 			    }
-			    return cr;
 			}
 		    }
 		}

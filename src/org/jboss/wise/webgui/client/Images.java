@@ -19,34 +19,24 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.wise.webgui.client.widgets;
+package org.jboss.wise.webgui.client;
 
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ImageBundle;
 
 /**
+ * Images used by wise web gui
+ * 
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
-public interface IconsBundle extends ImageBundle {
-    public AbstractImagePrototype open();
+public interface Images extends ImageBundle {
+    public AbstractImagePrototype info();
 
-    public AbstractImagePrototype close();
+    public AbstractImagePrototype standby();
 
-    public AbstractImagePrototype left();
+    public AbstractImagePrototype paint();
 
-    public AbstractImagePrototype right();
+    public AbstractImagePrototype trash();
 
-    public AbstractImagePrototype defaultSort();
-
-    public AbstractImagePrototype down();
-
-    public AbstractImagePrototype up();
-
-    public AbstractImagePrototype defaultSortActive();
-
-    public AbstractImagePrototype downActive();
-
-    public AbstractImagePrototype upActive();
-
-    public AbstractImagePrototype waiting();
+    public AbstractImagePrototype plus();
 }

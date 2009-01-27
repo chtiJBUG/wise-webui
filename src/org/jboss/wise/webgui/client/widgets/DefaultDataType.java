@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
 public enum DefaultDataType implements DataType {
-    STRING, INTEGER, LONG, FLOAT, DOUBLE, DATE, BOOLEAN;
+    STRING, INTEGER, LONG, FLOAT, DOUBLE, DATE, BOOLEAN, WIDGET;
 
     private Comparator<Object> comparator;
 
@@ -54,46 +54,54 @@ public enum DefaultDataType implements DataType {
 	    return DATE;
 	else if (data instanceof Boolean)
 	    return BOOLEAN;
+	else if (data instanceof Widget)
+	    return WIDGET;
 	else
 	    return STRING;
     }
 
     public Widget formatAsWidget(Object data, String simpleFormat) {
-	HTML widget = null;
+	Widget widget = null;
 	if (data != null) {
 	    String widgetConten = "";
 	    if (this == STRING) {
 		widgetConten = data.toString();
+		widget = new HTML(widgetConten);
 	    } else if (this == INTEGER) {
 		if (simpleFormat != null) {
 		    NumberFormat nf = NumberFormat.getFormat(simpleFormat);
 		    widgetConten = nf.format((Integer) data);
 		} else
 		    widgetConten = String.valueOf(((Integer) data).intValue());
+		widget = new HTML(widgetConten);
 	    } else if (this == LONG) {
 		if (simpleFormat != null) {
 		    NumberFormat nf = NumberFormat.getFormat(simpleFormat);
 		    widgetConten = nf.format((Long) data);
 		} else
 		    widgetConten = String.valueOf(((Long) data).intValue());
+		widget = new HTML(widgetConten);
 	    } else if (this == FLOAT) {
 		if (simpleFormat != null) {
 		    NumberFormat nf = NumberFormat.getFormat(simpleFormat);
 		    widgetConten = nf.format((Float) data);
 		} else
 		    widgetConten = String.valueOf(((Float) data).intValue());
+		widget = new HTML(widgetConten);
 	    } else if (this == DOUBLE) {
 		if (simpleFormat != null) {
 		    NumberFormat nf = NumberFormat.getFormat(simpleFormat);
 		    widgetConten = nf.format((Double) data);
 		} else
 		    widgetConten = String.valueOf(((Double) data).intValue());
+		widget = new HTML(widgetConten);
 	    } else if (this == DATE) {
 		if (simpleFormat == null) {
 		    simpleFormat = "dd/MM/yyyy";
 		}
 		DateTimeFormat dtf = DateTimeFormat.getFormat(simpleFormat);
 		widgetConten = dtf.format((Date) data);
+		widget = new HTML(widgetConten);
 	    } else if (this == BOOLEAN) {
 		String[] values;
 		if (simpleFormat != null) {
@@ -106,14 +114,17 @@ public enum DefaultDataType implements DataType {
 		} else {
 		    widgetConten = values.length > 1 ? values[1].trim() : null;
 		}
+		widget = new HTML(widgetConten);
+	    } else if (this == WIDGET) {
+		widget = (Widget) data;
 	    }
-
-	    widget = new HTML(widgetConten);
 	}
 	return widget;
     }
 
     public synchronized Comparator<Object> getComparator() {
+	if (this == WIDGET)
+	    return null;
 	if (comparator == null) {
 	    if (this == STRING) {
 		comparator = new DataTypeComparator() {

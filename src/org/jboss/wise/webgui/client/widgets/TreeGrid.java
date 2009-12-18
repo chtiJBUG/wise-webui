@@ -52,6 +52,9 @@ import com.google.gwt.user.client.ui.Widget;
  * @todo TODO: widget DOM may be created using a builder object that visits the
  *       TreeGrid data tree
  * @todo TODO: footer?
+ * @todo TODO: add a Row superclass for Group so that addRow returnw always a
+ *       not null object that may be used to customize the grid component
+ *       created
  * 
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
@@ -251,6 +254,24 @@ public class TreeGrid extends Composite {
 
     public void setBodyData(Object[]... bodyData) {
 	impl.setBodyData(bodyData);
+    }
+
+    /**
+     * Sets the tooltip type of each column of the grid body
+     * 
+     * @param types
+     */
+    public void setToolTipsTypes(CellType... types) {
+	impl.setToolTipsTypes(types);
+    }
+
+    /**
+     * @param toolTipsRow
+     *            Data whose type corresponds to the types passed as parameters
+     *            of the {@link #setToolTipsTypes} method.
+     */
+    public void addToolTips(Object... toolTipsRow) {
+	impl.addToolTips(toolTipsRow);
     }
 
     /**
@@ -548,6 +569,14 @@ public class TreeGrid extends Composite {
 
 	public void setBodyData(List<Object[]> bodyData) {
 	    bodyGroup.setBodyData(bodyData);
+	}
+
+	public void setToolTipsTypes(CellType... types) {
+	    bodyLevel.setToolTipsTypes(types);
+	}
+
+	public void addToolTips(Object... toolTipsRow) {
+	    bodyGroup.addToolTips(toolTipsRow);
 	}
 
 	private void sort() {

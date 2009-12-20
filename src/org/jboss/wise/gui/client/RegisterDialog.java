@@ -35,6 +35,9 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
+/**
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
+ */
 public class RegisterDialog {
 
     private static RegisterDialog instance = null;

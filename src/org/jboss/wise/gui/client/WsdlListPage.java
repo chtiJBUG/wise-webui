@@ -38,6 +38,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
+ */
 public class WsdlListPage extends Composite {
 
     private static WsdlListPageUiBinder uiBinder = GWT.create(WsdlListPageUiBinder.class);
@@ -63,11 +66,14 @@ public class WsdlListPage extends Composite {
     @UiField
     Button openBtn;
 
+    private List<ServiceWsdl> data;
+
     public WsdlListPage() {
+
 	initWidget(uiBinder.createAndBindUi(this));
-	List<ServiceWsdl> data = new ArrayList<ServiceWsdl>();
+	data = new ArrayList<ServiceWsdl>();
 	for (int i = 0; i < 100; i++) {
-	    data.add(new ServiceWsdl("Service " + i, "HOST " + i, "This tool may be...", new Date()));
+	    data.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
 	}
 	list.setList(data);
     }
@@ -81,8 +87,7 @@ public class WsdlListPage extends Composite {
 	} else if (e.getSource() == newBtn) {
 	    WsdlEditDialog.activate();
 	} else if (e.getSource() == openBtn) {
-
+	    WsdlRetrieve.activate(data.get(33));
 	}
     }
-
 }

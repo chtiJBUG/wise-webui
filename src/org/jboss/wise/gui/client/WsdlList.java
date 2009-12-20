@@ -39,6 +39,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
+ */
 public class WsdlList extends Composite {
 
     private static WsdlListUiBinder uiBinder = GWT.create(WsdlListUiBinder.class);
@@ -85,7 +88,7 @@ public class WsdlList extends Composite {
 
 	cell = TableCellElement.as(DOM.createTD());
 	cell.setAttribute("width", "60%");
-	cell.setInnerText(wsdl.getName() + "@" + wsdl.getHost() + ":" + wsdl.getNotes());
+	cell.setInnerText(wsdl.getName() + ":" + wsdl.getNotes());
 	row.appendChild(cell);
 
 	cell = TableCellElement.as(DOM.createTD());

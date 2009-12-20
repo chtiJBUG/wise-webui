@@ -33,6 +33,9 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 
+/**
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
+ */
 public class WsdlListRow {
 
     private static WsdlListRowUiBinder uiBinder = GWT.create(WsdlListRowUiBinder.class);
@@ -56,7 +59,7 @@ public class WsdlListRow {
     public WsdlListRow(ServiceWsdl wsdl) {
 	row = uiBinder.createAndBindUi(this);
 	name.setInnerText(wsdl.getName());
-	description.setInnerText(wsdl.getName() + "@" + wsdl.getHost() + ":" + wsdl.getNotes());
+	description.setInnerText(wsdl.getName() + "@" + wsdl.getUrl() + ":" + wsdl.getNotes());
 	savingDate.setInnerText(format(wsdl.getSavingDate()));
     }
 

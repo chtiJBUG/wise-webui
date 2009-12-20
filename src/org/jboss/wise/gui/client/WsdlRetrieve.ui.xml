@@ -17,46 +17,29 @@
 		to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
 		Boston, MA 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 	-->
-	<ui:style>
-		.form {
-			empty-cells: show;
-		}
-	</ui:style>
 	<g:DialogBox autoHide='false' modal='true'>
-		<g:caption>NEW ACCOUNT</g:caption>
+		<g:caption>WSDL RETRIEVE</g:caption>
 		<g:HTMLPanel>
-			<table class='{style.form}' width='100%'>
+			<table width='100%'>
 				<tr>
-					<td>Mail:</td>
+					<td>Retrieve wsdl from:</td>
 					<td>
-						<g:TextBox ui:field='mail' visibleLength='30' />
+						<span ui:field='wsdlUrl' />
 					</td>
 				</tr>
 				<tr>
-					<td>Confirm Mail:</td>
+					<td>User Name:</td>
 					<td>
-						<g:TextBox ui:field='confirmMail' visibleLength='30' />
+						<g:TextBox ui:field='userName' visibleLength='30' />
 					</td>
 				</tr>
-				<tr>
-					<td>Password:</td>
-					<td>
-						<g:PasswordTextBox ui:field='password'
-							visibleLength='15' maxLength='15' />
-					</td>
-				</tr>
-				<tr>
-					<td>Confirm Password:</td>
-					<td>
-						<g:PasswordTextBox ui:field='confirmPassword'
-							visibleLength='15' maxLength='15' />
-					</td>
-				</tr>
-				<tr>
-					<td colspan='2'>
-						<span ui:field='msg' />
-					</td>
-				</tr>
+                <tr>
+                    <td>Password:</td>
+                    <td>
+                        <g:PasswordTextBox ui:field='password'
+                            visibleLength='15' maxLength='15' />
+                    </td>
+                </tr>
 			</table>
 			<table width='100%'>
 				<tr>

@@ -26,6 +26,8 @@ import com.google.gwt.core.client.EntryPoint;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
+ * 
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
 public class Wise_gui implements EntryPoint {
 

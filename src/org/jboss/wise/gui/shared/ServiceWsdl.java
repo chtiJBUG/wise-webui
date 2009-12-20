@@ -25,22 +25,25 @@ package org.jboss.wise.gui.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
+ */
 public class ServiceWsdl implements Serializable {
 
     private static final long serialVersionUID = -4647111183719034021L;
 
     private String name;
 
-    private String host;
+    private String url;
 
     private String notes;
 
     private Date savingDate;
 
-    public ServiceWsdl(String name, String host, String notes, Date savingDate) {
+    public ServiceWsdl(String name, String url, String notes, Date savingDate) {
 	super();
 	this.name = name;
-	this.host = host;
+	this.url = url;
 	this.notes = notes;
 	this.savingDate = savingDate;
     }
@@ -49,8 +52,8 @@ public class ServiceWsdl implements Serializable {
 	return name;
     }
 
-    public String getHost() {
-	return host;
+    public String getUrl() {
+	return url;
     }
 
     public String getNotes() {

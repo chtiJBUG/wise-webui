@@ -1,0 +1,41 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:DialogBox autoHide='false' modal='true'>
+		<g:caption>LOGIN</g:caption>
+		<g:HTMLPanel>
+			<table width='100%'>
+				<tr>
+					<td>Mail:</td>
+					<td>
+						<g:TextBox ui:field='mail' visibleLength='30' />
+					</td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td>
+						<g:PasswordTextBox ui:field='password'
+							visibleLength='15' maxLength='15' />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<g:CheckBox ui:field='rememberMe'>Remember Me</g:CheckBox>
+					</td>
+				</tr>
+			</table>
+			<table width='100%'>
+				<tr>
+					<td align='left'>
+						<g:Button ui:field='forgotPasswordBtn'>Forgot Password...</g:Button>
+					</td>
+					<td align='right'>
+						<g:Button ui:field='registerBtn'>Register...</g:Button>
+						<g:SubmitButton ui:field='loginBtn'>Login</g:SubmitButton>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+	</g:DialogBox>
+</ui:UiBinder> 

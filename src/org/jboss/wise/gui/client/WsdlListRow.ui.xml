@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	<ui:style>
+		.name {
+			width: 20%
+		}
+		
+		.description {
+			width: 60%
+		}
+		
+		.savingDate {
+			width: 20%
+		}
+	</ui:style>
+	<tr>
+		<td ui:field='name' class='{style.name}'></td>
+		<td ui:field='description' class='{style.description}'></td>
+		<td ui:field='savingDate' class='{style.savingDate}'></td>
+	</tr>
+</ui:UiBinder>

@@ -40,8 +40,6 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class RegisterDialog {
 
-    private static RegisterDialog instance = null;
-
     private static RegisterDialogUiBinder uiBinder = GWT.create(RegisterDialogUiBinder.class);
 
     interface RegisterDialogUiBinder extends UiBinder<DialogBox, RegisterDialog> {
@@ -70,18 +68,12 @@ public class RegisterDialog {
     @UiField
     Button cancelBtn;
 
-    private RegisterDialog() {
+    public RegisterDialog() {
 	dialog = uiBinder.createAndBindUi(this);
 	okBtn.addStyleName("gwt-Button");
     }
 
-    public static void activate() {
-	if (instance == null)
-	    instance = new RegisterDialog();
-	instance.show();
-    }
-
-    private void show() {
+    public void show() {
 	if (!dialog.isShowing()) {
 	    enableButtons();
 	    dialog.center();
@@ -111,10 +103,10 @@ public class RegisterDialog {
     void handleClick(ClickEvent e) {
 	if (e.getSource() == okBtn) {
 	    dialog.hide();
-	    LoginDialog.activate();
+	    Wise_gui.getInstance().login();
 	} else if (e.getSource() == cancelBtn) {
 	    dialog.hide();
-	    LoginDialog.activate();
+	    Wise_gui.getInstance().login();
 	}
     }
 

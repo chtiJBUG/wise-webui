@@ -37,8 +37,6 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class WsdlEditDialog {
 
-    private static WsdlEditDialog instance = null;
-
     private static WsdlEditDialogUiBinder uiBinder = GWT.create(WsdlEditDialogUiBinder.class);
 
     interface WsdlEditDialogUiBinder extends UiBinder<DialogBox, WsdlEditDialog> {
@@ -61,7 +59,7 @@ public class WsdlEditDialog {
     @UiField
     Button okBtn;
 
-    private WsdlEditDialog() {
+    public WsdlEditDialog() {
 	dialog = uiBinder.createAndBindUi(this);
 	okBtn.addStyleName("gwt-Button");
     }
@@ -75,13 +73,7 @@ public class WsdlEditDialog {
 	}
     }
 
-    public static void activate() {
-	if (instance == null)
-	    instance = new WsdlEditDialog();
-	instance.show();
-    }
-
-    private void show() {
+    public void show() {
 	if (!dialog.isShowing()) {
 	    enableButtons();
 	    dialog.center();

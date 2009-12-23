@@ -38,8 +38,6 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class PasswordReminderDialog {
 
-    private static PasswordReminderDialog instance = null;
-
     private static PasswordReminderDialogUiBinder uiBinder = GWT.create(PasswordReminderDialogUiBinder.class);
 
     interface PasswordReminderDialogUiBinder extends UiBinder<DialogBox, PasswordReminderDialog> {
@@ -56,18 +54,12 @@ public class PasswordReminderDialog {
     @UiField
     TextBox mail;
 
-    private PasswordReminderDialog() {
+    public PasswordReminderDialog() {
 	dialog = uiBinder.createAndBindUi(this);
 	sendBtn.addStyleName("gwt-Button");
     }
 
-    public static void activate() {
-	if (instance == null)
-	    instance = new PasswordReminderDialog();
-	instance.show();
-    }
-
-    private void show() {
+    public void show() {
 	mail.setText("");
 	if (!dialog.isShowing()) {
 	    enableButtons();
@@ -82,10 +74,10 @@ public class PasswordReminderDialog {
     void onClick(ClickEvent e) {
 	if (e.getSource() == sendBtn) {
 	    dialog.hide();
-	    LoginDialog.activate();
+	    Wise_gui.getInstance().login();
 	} else if (e.getSource() == cancelBtn) {
 	    dialog.hide();
-	    LoginDialog.activate();
+	    Wise_gui.getInstance().login();
 	}
     }
 

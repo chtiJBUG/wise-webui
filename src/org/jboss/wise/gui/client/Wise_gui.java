@@ -22,7 +22,16 @@
 
 package org.jboss.wise.gui.client;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.jboss.wise.gui.shared.Operation;
+import org.jboss.wise.gui.shared.ServiceEndpoint;
+import org.jboss.wise.gui.shared.ServiceWsdl;
+
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -31,7 +40,151 @@ import com.google.gwt.core.client.EntryPoint;
  */
 public class Wise_gui implements EntryPoint {
 
+    private static Wise_gui instance = null;
+
+    private LoginDialog loginDialog = null;
+
+    private PasswordReminderDialog passwordReminderDialog = null;
+
+    private RegisterDialog registerDialog = null;
+
+    private Desk desk = null;
+
+    private WsdlListFrame wsdlListFrame = null;
+
+    private WsdlEditDialog wsdlEditDialog = null;
+
+    private List<ServiceWsdl> savedWsdlList = null;
+
+    private WsdlRetrieve wsdlRetrieveDialog = null;
+
+    private EndpointSelection endpointSelectionDialog = null;
+
+    private WsdlBrowser wsdlBrowser = null;
+
+    private ServiceWsdl selectedWsdl = null;
+
+    private ServiceEndpoint serviceEndpoint = null;
+
+    private List<Operation> operations = null;
+
     public void onModuleLoad() {
-	LoginDialog.activate();
+	instance = this;
+	login();
     }
+
+    public static Wise_gui getInstance() {
+	return instance;
+    }
+
+    public void login() {
+	if (loginDialog == null) {
+	    loginDialog = new LoginDialog();
+	}
+	loginDialog.show();
+    }
+
+    public void passwordReminder() {
+	if (passwordReminderDialog == null) {
+	    passwordReminderDialog = new PasswordReminderDialog();
+	}
+	passwordReminderDialog.show();
+    }
+
+    public void register() {
+	if (registerDialog == null) {
+	    registerDialog = new RegisterDialog();
+	}
+	registerDialog.show();
+    }
+
+    // TODO: implement a real login verify
+    public boolean verifyLogin(String mail, String password) {
+	if (desk == null) {
+	    desk = new Desk();
+	    RootPanel.get("main").add(desk);
+	}
+	savedWsdlList = new ArrayList<ServiceWsdl>();
+	for (int i = 0; i < 100; i++) {
+	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
+	}
+	selectedWsdl = savedWsdlList.get(33);
+	serviceEndpoint = new ServiceEndpoint(selectedWsdl);
+	operations = new ArrayList<Operation>();
+	for (int op = 0; op < 30; op++) {
+	    operations.add(new Operation("Operation " + op));
+	}
+	return true;
+    }
+
+    public void editWsdl() {
+	if (wsdlEditDialog == null) {
+	    wsdlEditDialog = new WsdlEditDialog();
+	}
+	wsdlEditDialog.show();
+    }
+
+    public void newWsdl() {
+	if (wsdlEditDialog == null) {
+	    wsdlEditDialog = new WsdlEditDialog();
+	}
+	wsdlEditDialog.show();
+    }
+
+    public void logout() {
+	if (desk != null) {
+	    RootPanel.get("main").remove(desk);
+	    desk.setContentWidget(null);
+	    desk = null;
+	    wsdlListFrame = null;
+	}
+	login();
+    }
+
+    public void wsdlList() {
+	if (wsdlListFrame == null) {
+	    wsdlListFrame = new WsdlListFrame();
+	}
+	desk.setContentWidget(wsdlListFrame);
+    }
+
+    public void retrieveWsdl() {
+	if (wsdlRetrieveDialog == null) {
+	    wsdlRetrieveDialog = new WsdlRetrieve();
+	}
+	wsdlRetrieveDialog.show(Wise_gui.getInstance().getSelectedWsdl());
+    }
+
+    public void selectEndpoint() {
+	if (endpointSelectionDialog == null) {
+	    endpointSelectionDialog = new EndpointSelection();
+	}
+	endpointSelectionDialog.show(serviceEndpoint);
+    }
+
+    public void operations() {
+	desk.setContentWidget(null);
+    }
+
+    /**
+     * @return savedWsdlList
+     */
+    public List<ServiceWsdl> getSavedWsdlList() {
+	return savedWsdlList;
+    }
+
+    /**
+     * @return selectedWsdl
+     */
+    public ServiceWsdl getSelectedWsdl() {
+	return selectedWsdl;
+    }
+
+    /**
+     * @return operations
+     */
+    public List<Operation> getOperations() {
+	return operations;
+    }
+
 }

@@ -33,15 +33,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
 public class LoginDialog {
-
-    private static LoginDialog instance = null;
 
     private static LoginDialogUiBinder uiBinder = GWT.create(LoginDialogUiBinder.class);
 
@@ -68,18 +65,12 @@ public class LoginDialog {
     @UiField
     Button forgotPasswordBtn;
 
-    private LoginDialog() {
+    public LoginDialog() {
 	dialog = uiBinder.createAndBindUi(this);
 	loginBtn.addStyleName("gwt-Button");
     }
 
-    public static void activate() {
-	if (instance == null)
-	    instance = new LoginDialog();
-	instance.show();
-    }
-
-    private void show() {
+    public void show() {
 	if (!dialog.isShowing()) {
 	    enableButtons();
 	    dialog.center();
@@ -92,14 +83,18 @@ public class LoginDialog {
     @UiHandler( { "loginBtn", "registerBtn", "forgotPasswordBtn" })
     void handleClick(ClickEvent e) {
 	if (e.getSource() == loginBtn) {
-	    dialog.hide();
-	    RootPanel.get("main").add(new WsdlListPage());
+	    if (Wise_gui.getInstance().verifyLogin(mail.getText(), password.getText())) {
+		dialog.hide();
+		Wise_gui.getInstance().wsdlList();
+	    } else {
+		// TODO: display wrong user or password message
+	    }
 	} else if (e.getSource() == registerBtn) {
 	    dialog.hide();
-	    RegisterDialog.activate();
+	    Wise_gui.getInstance().register();
 	} else if (e.getSource() == forgotPasswordBtn) {
 	    dialog.hide();
-	    PasswordReminderDialog.activate();
+	    Wise_gui.getInstance().passwordReminder();
 	}
     }
 

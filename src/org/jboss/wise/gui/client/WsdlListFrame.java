@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2009, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2008, Red Hat Middleware LLC, and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors. 
  *
@@ -21,75 +21,59 @@
  */
 package org.jboss.wise.gui.client;
 
-import org.jboss.wise.gui.shared.ServiceWsdl;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
-public class WsdlRetrieve {
+public class WsdlListFrame extends Composite {
 
-    private static WsdlRetrieveUiBinder uiBinder = GWT.create(WsdlRetrieveUiBinder.class);
+    private static WsdlListFrameUiBinder uiBinder = GWT.create(WsdlListFrameUiBinder.class);
 
-    interface WsdlRetrieveUiBinder extends UiBinder<DialogBox, WsdlRetrieve> {
+    interface WsdlListFrameUiBinder extends UiBinder<Widget, WsdlListFrame> {
     }
 
     @UiField
-    SpanElement wsdlUrl;
+    WsdlList list;
 
     @UiField
-    Button okBtn;
+    TextBox searchBox;
 
     @UiField
-    Button cancelBtn;
+    Button deleteBtn;
 
     @UiField
-    TextBox userName;
+    Button editBtn;
 
     @UiField
-    PasswordTextBox password;
+    Button newBtn;
 
-    private DialogBox dialog;
+    @UiField
+    Button openBtn;
 
-    private ServiceWsdl wsdl;
-
-    public WsdlRetrieve() {
-	dialog = uiBinder.createAndBindUi(this);
-	okBtn.addStyleName("gwt-Button");
+    public WsdlListFrame() {
+	initWidget(uiBinder.createAndBindUi(this));
+	list.setList(Wise_gui.getInstance().getSavedWsdlList());
     }
 
-    public void show(ServiceWsdl wsdl) {
-	this.wsdl = wsdl;
-	if (!dialog.isShowing()) {
-	    wsdlUrl.setInnerText(wsdl.getUrl());
-	    enableButtons();
-	    dialog.center();
-	    dialog.show();
-	    userName.setFocus(true);
-	    userName.selectAll();
-	}
-    }
-
-    private void enableButtons() {
-    }
-
-    @UiHandler( { "okBtn", "cancelBtn" })
+    @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn" })
     void onClick(ClickEvent e) {
-	if (e.getSource() == cancelBtn) {
-	    dialog.hide();
-	} else if (e.getSource() == okBtn) {
-	    dialog.hide();
-	    Wise_gui.getInstance().selectEndpoint();
+	if (e.getSource() == deleteBtn) {
+
+	} else if (e.getSource() == editBtn) {
+	    Wise_gui.getInstance().editWsdl();
+	} else if (e.getSource() == newBtn) {
+	    Wise_gui.getInstance().newWsdl();
+	} else if (e.getSource() == openBtn) {
+	    Wise_gui.getInstance().retrieveWsdl();
 	}
     }
 

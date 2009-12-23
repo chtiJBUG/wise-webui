@@ -40,8 +40,6 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class EndpointSelection {
 
-    private static EndpointSelection instance = null;
-
     private static EndpointSelectionUiBinder uiBinder = GWT.create(EndpointSelectionUiBinder.class);
 
     interface EndpointSelectionUiBinder extends UiBinder<DialogBox, EndpointSelection> {
@@ -73,18 +71,12 @@ public class EndpointSelection {
     @UiField
     Button cancelBtn;
 
-    private EndpointSelection() {
+    public EndpointSelection() {
 	dialog = uiBinder.createAndBindUi(this);
 	okBtn.addStyleName("gwt-Button");
     }
 
-    public static void activate(ServiceEndpoint endpoint) {
-	if (instance == null)
-	    instance = new EndpointSelection();
-	instance.show(endpoint);
-    }
-
-    private void show(ServiceEndpoint endpoint) {
+    public void show(ServiceEndpoint endpoint) {
 	if (!dialog.isShowing()) {
 	    serviceName.setInnerText(endpoint.getWsdl().getName());
 	    description.setInnerText(endpoint.getWsdl().getName() + ":" + endpoint.getWsdl().getNotes());
@@ -107,6 +99,7 @@ public class EndpointSelection {
 	    dialog.hide();
 	} else if (e.getSource() == okBtn) {
 	    dialog.hide();
+	    Wise_gui.getInstance().operations();
 	}
     }
 

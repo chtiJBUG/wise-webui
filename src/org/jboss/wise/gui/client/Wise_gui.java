@@ -163,7 +163,10 @@ public class Wise_gui implements EntryPoint {
     }
 
     public void operations() {
-	desk.setContentWidget(null);
+	if (wsdlBrowser == null) {
+	    wsdlBrowser = new WsdlBrowser();
+	}
+	desk.setContentWidget(wsdlBrowser);
     }
 
     /**

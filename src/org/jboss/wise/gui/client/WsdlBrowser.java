@@ -26,8 +26,14 @@ import java.util.List;
 import org.jboss.wise.gui.shared.Operation;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -37,6 +43,14 @@ public class WsdlBrowser extends Composite {
 
     private static WsdlBrowserUiBinder uiBinder = GWT.create(WsdlBrowserUiBinder.class);
 
+    @UiField
+    ListBox operations;
+
+    @UiField
+    SimplePanel scrapBook;
+
+    private Sheet[] sheets;
+
     interface WsdlBrowserUiBinder extends UiBinder<Widget, WsdlBrowser> {
     }
 
@@ -44,8 +58,31 @@ public class WsdlBrowser extends Composite {
 	initWidget(uiBinder.createAndBindUi(this));
 	List<Operation> ops = Wise_gui.getInstance().getOperations();
 	for (Operation op : ops) {
+	    operations.addItem(op.getName());
+	}
+	sheets = new Sheet[Wise_gui.getInstance().getOperations().size()];
+    }
 
+    @UiHandler("operations")
+    void handleClick(ClickEvent e) {
+    }
+
+    @UiHandler("operations")
+    void handleChange(ChangeEvent e) {
+	if (e.getSource() == operations) {
+	    selectOperation(operations.getSelectedIndex());
 	}
     }
 
+    /**
+     * @param selectedIndex
+     */
+    public void selectOperation(int selectedIndex) {
+	assert selectedIndex >= 0 && selectedIndex < sheets.length;
+	Sheet sheet = sheets[selectedIndex];
+	if (sheet == null) {
+	    sheets[selectedIndex] = sheet = new Sheet(Wise_gui.getInstance().getOperations().get(selectedIndex));
+	}
+	scrapBook.setWidget(sheet);
+    }
 }

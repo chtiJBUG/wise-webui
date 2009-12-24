@@ -1,6 +1,26 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:wise="urn:import:org.jboss.wise.gui.client">
+	<ui:style>
+		.operationsList {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			bottom: 0px;
+			width: 180px;
+		}
+		.sheet {
+			position: absolute;
+			top: 0px;
+			left: 186px;
+			bottom: 0px;
+			right: 0px;
+		}
+	</ui:style>
 	<g:HTMLPanel>
+		<g:ListBox ui:field='operations' styleName='{style.operationsList}'
+			visibleItemCount='2'>
+		</g:ListBox>
+		<g:SimplePanel ui:field='scrapBook' styleName='{style.sheet}'/>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -108,12 +108,6 @@ public class Wise_gui implements EntryPoint {
 	for (int i = 0; i < 100; i++) {
 	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
 	}
-	selectedWsdl = savedWsdlList.get(33);
-	serviceEndpoint = new ServiceEndpoint(selectedWsdl);
-	operations = new ArrayList<Operation>();
-	for (int op = 0; op < 30; op++) {
-	    operations.add(new Operation("Operation " + op));
-	}
 	return true;
     }
 
@@ -174,6 +168,24 @@ public class Wise_gui implements EntryPoint {
      */
     public List<ServiceWsdl> getSavedWsdlList() {
 	return savedWsdlList;
+    }
+
+    /**
+     * @param selectedWsdl
+     *            Sets selectedWsdl to the specified value.
+     */
+    public void setSelectedWsdl(ServiceWsdl selectedWsdl) {
+	this.selectedWsdl = selectedWsdl;
+	if (selectedWsdl != null) {
+	    serviceEndpoint = new ServiceEndpoint(selectedWsdl);
+	    operations = new ArrayList<Operation>();
+	    for (int op = 0; op < 30; op++) {
+		operations.add(new Operation("Operation " + op));
+	    }
+	} else {
+	    serviceEndpoint = null;
+	    operations = null;
+	}
     }
 
     /**

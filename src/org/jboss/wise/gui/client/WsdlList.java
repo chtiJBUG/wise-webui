@@ -29,14 +29,18 @@ import org.jboss.wise.gui.shared.ServiceWsdl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.dom.client.TableSectionElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -46,63 +50,131 @@ public class WsdlList extends Composite {
 
     private static WsdlListUiBinder uiBinder = GWT.create(WsdlListUiBinder.class);
 
-    interface WsdlListUiBinder extends UiBinder<Widget, WsdlList> {
+    interface WsdlListUiBinder extends UiBinder<HTMLPanel, WsdlList> {
     }
 
     @UiField
     TableSectionElement content;
 
-    private List<ServiceWsdl> list;
+    private HTMLPanel panel;
 
-    private static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm");
+    private String contentId;
+
+    private RowWidget selectedRow = null;
+
+    private WsdlListFrame listFrame = null;
 
     public WsdlList() {
-	initWidget(uiBinder.createAndBindUi(this));
+	panel = uiBinder.createAndBindUi(this);
+	initWidget(panel);
+	contentId = HTMLPanel.createUniqueId();
+	content.setId(contentId);
     }
 
     public void setList(List<ServiceWsdl> list) {
-	this.list = list;
 	NodeList<TableRowElement> rows = content.getRows();
 	if (rows != null) {
 	    while (rows.getLength() > 0) {
 		content.deleteRow(-1);
 	    }
 	}
+	int i = 0;
 	for (ServiceWsdl wsdl : list) {
-	    // WsdlListRow rowCtrl = new WsdlListRow(wsdl);
-	    TableRowElement newRow = createRow(wsdl); // rowCtrl.getRow();
+	    RowWidget rw = new RowWidget(wsdl);
+	    com.google.gwt.user.client.Element newRow = rw.getElement();
 	    if (newRow != null) {
-		content.appendChild(newRow);
+		if (i % 2 == 0) {
+		    newRow.addClassName("even");
+		} else {
+		    newRow.addClassName("odd");
+		}
+		panel.add(rw, contentId);
 	    }
+	    i++;
 	}
     }
 
-    private TableRowElement createRow(ServiceWsdl wsdl) {
-	TableRowElement row = TableRowElement.as(DOM.createTR());
-	TableCellElement cell;
-
-	cell = TableCellElement.as(DOM.createTD());
-	cell.setAttribute("width", "20%");
-	cell.setInnerText(wsdl.getName());
-	row.appendChild(cell);
-
-	cell = TableCellElement.as(DOM.createTD());
-	cell.setAttribute("width", "60%");
-	cell.setInnerText(wsdl.getName() + ":" + wsdl.getNotes());
-	row.appendChild(cell);
-
-	cell = TableCellElement.as(DOM.createTD());
-	cell.setAttribute("width", "20%");
-	cell.setInnerText(format(wsdl.getSavingDate()));
-	row.appendChild(cell);
-
-	return row;
+    public void setListFrame(WsdlListFrame listFrame) {
+	this.listFrame = listFrame;
     }
 
-    private static String format(Date v) {
-	if (v == null)
-	    return "";
-	else
+    void select(RowWidget newSelectedRow) {
+	if (newSelectedRow != selectedRow) {
+	    if (selectedRow != null) {
+		selectedRow.removeStyleName("selected");
+	    }
+	    if (newSelectedRow != null) {
+		newSelectedRow.addStyleName("selected");
+	    }
+	    selectedRow = newSelectedRow;
+	    listFrame.enableButtons();
+	}
+    }
+
+    private static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm");
+
+    private class RowWidget extends HTMLPanel implements ClickHandler {
+
+	ServiceWsdl wsdl;
+
+	public RowWidget(ServiceWsdl wsdl) {
+	    super("tr", "");
+	    this.wsdl = wsdl;
+	    this.add(new CellWidget("20%", wsdl.getName()));
+	    this.add(new CellWidget("60%", wsdl.getName() + ":" + wsdl.getNotes()));
+	    this.add(new CellWidget("20%", format(wsdl.getSavingDate())));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
+	 */
+	public void onClick(ClickEvent event) {
+	    Wise_gui.getInstance().setSelectedWsdl(this.wsdl);
+	}
+
+	@Override
+	public void add(Widget cell) {
+	    add(cell, getElement());
+	}
+
+	private class CellWidget extends Widget implements HasClickHandlers, ClickHandler {
+
+	    public CellWidget(String width, String text) {
+		setElement(DOM.createTD());
+		getElement().setAttribute("width", width);
+		getElement().setInnerText(text);
+		addClickHandler(this);
+	    }
+
+	    /**
+	     * {@inheritDoc}
+	     * 
+	     * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
+	     */
+	    public void onClick(ClickEvent event) {
+		Wise_gui.getInstance().setSelectedWsdl(RowWidget.this.wsdl);
+		select(RowWidget.this);
+	    }
+
+	    /**
+	     * {@inheritDoc}
+	     * 
+	     * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
+	     */
+	    public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addDomHandler(handler, ClickEvent.getType());
+	    }
+	}
+
+	@SuppressWarnings("synthetic-access")
+	private String format(Date v) {
+	    if (v == null)
+		return "";
 	    return dateTimeFormat.format(v);
+	}
+
     }
+
 }

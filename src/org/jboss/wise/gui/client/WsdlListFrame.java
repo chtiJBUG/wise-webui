@@ -62,6 +62,8 @@ public class WsdlListFrame extends Composite {
     public WsdlListFrame() {
 	initWidget(uiBinder.createAndBindUi(this));
 	list.setList(Wise_gui.getInstance().getSavedWsdlList());
+	list.setListFrame(this);
+	enableButtons();
     }
 
     @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn" })
@@ -75,6 +77,22 @@ public class WsdlListFrame extends Composite {
 	} else if (e.getSource() == openBtn) {
 	    Wise_gui.getInstance().retrieveWsdl();
 	}
+    }
+
+    /**
+     * 
+     */
+    public void enableButtons() {
+	if (Wise_gui.getInstance().getSelectedWsdl() != null) {
+	    deleteBtn.setEnabled(true);
+	    editBtn.setEnabled(true);
+	    openBtn.setEnabled(true);
+	} else {
+	    deleteBtn.setEnabled(false);
+	    editBtn.setEnabled(false);
+	    openBtn.setEnabled(false);
+	}
+	newBtn.setEnabled(true);
     }
 
 }

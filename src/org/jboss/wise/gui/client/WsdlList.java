@@ -28,6 +28,7 @@ import java.util.List;
 import org.jboss.wise.gui.shared.ServiceWsdl;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.dom.client.TableSectionElement;
@@ -38,9 +39,13 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -54,7 +59,22 @@ public class WsdlList extends Composite {
     }
 
     @UiField
+    TextBox searchBox;
+
+    @UiField
     TableSectionElement content;
+
+    @UiField
+    Button deleteBtn;
+
+    @UiField
+    Button editBtn;
+
+    @UiField
+    Button newBtn;
+
+    @UiField
+    Button openBtn;
 
     private HTMLPanel panel;
 
@@ -62,16 +82,16 @@ public class WsdlList extends Composite {
 
     private RowWidget selectedRow = null;
 
-    private WsdlListFrame listFrame = null;
-
     public WsdlList() {
 	panel = uiBinder.createAndBindUi(this);
 	initWidget(panel);
 	contentId = HTMLPanel.createUniqueId();
 	content.setId(contentId);
+	setList(Wise_gui.getInstance().getSavedWsdlList());
+	enableButtons();
     }
 
-    public void setList(List<ServiceWsdl> list) {
+    private void setList(List<ServiceWsdl> list) {
 	NodeList<TableRowElement> rows = content.getRows();
 	if (rows != null) {
 	    while (rows.getLength() > 0) {
@@ -94,10 +114,6 @@ public class WsdlList extends Composite {
 	}
     }
 
-    public void setListFrame(WsdlListFrame listFrame) {
-	this.listFrame = listFrame;
-    }
-
     void select(RowWidget newSelectedRow) {
 	if (newSelectedRow != selectedRow) {
 	    if (selectedRow != null) {
@@ -107,18 +123,44 @@ public class WsdlList extends Composite {
 		newSelectedRow.addStyleName("selected");
 	    }
 	    selectedRow = newSelectedRow;
-	    listFrame.enableButtons();
+	    enableButtons();
+	}
+    }
+
+    public void enableButtons() {
+	if (Wise_gui.getInstance().getSelectedWsdl() != null) {
+	    deleteBtn.setEnabled(true);
+	    editBtn.setEnabled(true);
+	    openBtn.setEnabled(true);
+	} else {
+	    deleteBtn.setEnabled(false);
+	    editBtn.setEnabled(false);
+	    openBtn.setEnabled(false);
+	}
+	newBtn.setEnabled(true);
+    }
+
+    @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn" })
+    void onClick(ClickEvent e) {
+	if (e.getSource() == deleteBtn) {
+
+	} else if (e.getSource() == editBtn) {
+	    Wise_gui.getInstance().editWsdl();
+	} else if (e.getSource() == newBtn) {
+	    Wise_gui.getInstance().newWsdl();
+	} else if (e.getSource() == openBtn) {
+	    Wise_gui.getInstance().retrieveWsdl();
 	}
     }
 
     private static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm");
 
-    private class RowWidget extends HTMLPanel implements ClickHandler {
+    private class RowWidget extends ComplexPanel implements ClickHandler {
 
 	ServiceWsdl wsdl;
 
 	public RowWidget(ServiceWsdl wsdl) {
-	    super("tr", "");
+	    setElement(Document.get().createTRElement());
 	    this.wsdl = wsdl;
 	    this.add(new CellWidget("20%", wsdl.getName()));
 	    this.add(new CellWidget("60%", wsdl.getName() + ":" + wsdl.getNotes()));

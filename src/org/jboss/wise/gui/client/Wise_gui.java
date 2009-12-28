@@ -50,7 +50,7 @@ public class Wise_gui implements EntryPoint {
 
     private Desk desk = null;
 
-    private WsdlListFrame wsdlListFrame = null;
+    private WsdlList wsdlList = null;
 
     private WsdlEditDialog wsdlEditDialog = null;
 
@@ -98,7 +98,6 @@ public class Wise_gui implements EntryPoint {
 	registerDialog.show();
     }
 
-    // TODO: implement a real login verify
     public boolean verifyLogin(String mail, String password) {
 	if (desk == null) {
 	    desk = new Desk();
@@ -130,16 +129,16 @@ public class Wise_gui implements EntryPoint {
 	    RootPanel.get("main").remove(desk);
 	    desk.setContentWidget(null);
 	    desk = null;
-	    wsdlListFrame = null;
+	    wsdlList = null;
 	}
 	login();
     }
 
     public void wsdlList() {
-	if (wsdlListFrame == null) {
-	    wsdlListFrame = new WsdlListFrame();
+	if (wsdlList == null) {
+	    wsdlList = new WsdlList();
 	}
-	desk.setContentWidget(wsdlListFrame);
+	desk.setContentWidget(wsdlList);
     }
 
     public void retrieveWsdl() {

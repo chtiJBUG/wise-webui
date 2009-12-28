@@ -94,3 +94,7 @@ div.content table td.last {
 	border-right-style: none !important;
 	border-right-color: #000 !important;
 }
+.backlink {
+    color: #69E;
+    cursor: pointer;
+}

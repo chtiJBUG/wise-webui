@@ -31,6 +31,11 @@ import org.jboss.wise.gui.shared.ServiceEndpoint;
 import org.jboss.wise.gui.shared.ServiceWsdl;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -67,6 +72,8 @@ public class Wise_gui implements EntryPoint {
     private ServiceEndpoint serviceEndpoint = null;
 
     private List<Operation> operations = null;
+
+    private String navBarRootId = HTMLPanel.createUniqueId();
 
     public void onModuleLoad() {
 	instance = this;
@@ -138,7 +145,10 @@ public class Wise_gui implements EntryPoint {
 	if (wsdlList == null) {
 	    wsdlList = new WsdlList();
 	}
+	serviceEndpoint = null;
+	operations = null;
 	desk.setContentWidget(wsdlList);
+	desk.setNavBarWidget(new HTMLPanel("span", "WISEGui"));
     }
 
     public void retrieveWsdl() {
@@ -152,14 +162,31 @@ public class Wise_gui implements EntryPoint {
 	if (endpointSelectionDialog == null) {
 	    endpointSelectionDialog = new EndpointSelection();
 	}
+	serviceEndpoint = new ServiceEndpoint(selectedWsdl);
 	endpointSelectionDialog.show(serviceEndpoint);
     }
 
     public void operations() {
+	operations = new ArrayList<Operation>();
+	for (int op = 0; op < 30; op++) {
+	    operations.add(new Operation("Operation " + op));
+	}
 	if (wsdlBrowser == null) {
 	    wsdlBrowser = new WsdlBrowser();
 	}
 	desk.setContentWidget(wsdlBrowser);
+	StringBuilder sb = new StringBuilder();
+	sb.append("<span id='" + navBarRootId + "'></span> > ");
+	sb.append(serviceEndpoint.getWsdl().getName());
+	HTMLPanel navBar = new HTMLPanel("span", sb.toString());
+	BackLink backLink = new BackLink("WISEGui");
+	backLink.addClickHandler(new ClickHandler() {
+	    public void onClick(ClickEvent event) {
+		wsdlList();
+	    }
+	});
+	navBar.addAndReplaceElement(backLink, navBarRootId);
+	desk.setNavBarWidget(navBar);
     }
 
     /**
@@ -175,16 +202,6 @@ public class Wise_gui implements EntryPoint {
      */
     public void setSelectedWsdl(ServiceWsdl selectedWsdl) {
 	this.selectedWsdl = selectedWsdl;
-	if (selectedWsdl != null) {
-	    serviceEndpoint = new ServiceEndpoint(selectedWsdl);
-	    operations = new ArrayList<Operation>();
-	    for (int op = 0; op < 30; op++) {
-		operations.add(new Operation("Operation " + op));
-	    }
-	} else {
-	    serviceEndpoint = null;
-	    operations = null;
-	}
     }
 
     /**
@@ -199,6 +216,27 @@ public class Wise_gui implements EntryPoint {
      */
     public List<Operation> getOperations() {
 	return operations;
+    }
+
+    private class BackLink extends HTMLPanel implements HasClickHandlers {
+
+	/**
+	 * @param html
+	 */
+	public BackLink(String html) {
+	    super("span", html);
+	    addStyleName("backlink");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
+	 */
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+	    return addDomHandler(handler, ClickEvent.getType());
+	}
+
     }
 
 }

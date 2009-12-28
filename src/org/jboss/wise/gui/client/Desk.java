@@ -41,12 +41,19 @@ public class Desk extends Composite {
     @UiField
     SimplePanel content;
 
+    @UiField
+    SimplePanel navBar;
+
     public Desk() {
 	initWidget(uiBinder.createAndBindUi(this));
     }
 
     public void setContentWidget(Widget contentWidget) {
 	content.setWidget(contentWidget);
+    }
+
+    public void setNavBarWidget(Widget navBarWidget) {
+	navBar.setWidget(navBarWidget);
     }
 
 }

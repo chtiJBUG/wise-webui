@@ -22,9 +22,12 @@
 package org.jboss.wise.gui.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,14 +41,26 @@ public class Desk extends Composite {
     interface DeskUiBinder extends UiBinder<Widget, Desk> {
     }
 
+    static {
+	Resources.INSTANCE.wiseGuiStyle().ensureInjected();
+    }
+
     @UiField
     SimplePanel content;
 
     @UiField
     SimplePanel navBar;
 
+    @UiField
+    Image editBtn;
+
+    @UiField
+    Image logoutBtn;
+
     public Desk() {
 	initWidget(uiBinder.createAndBindUi(this));
+	editBtn.addStyleName(Resources.INSTANCE.wiseGuiStyle().btnImage());
+	logoutBtn.addStyleName(Resources.INSTANCE.wiseGuiStyle().btnImage());
     }
 
     public void setContentWidget(Widget contentWidget) {
@@ -54,6 +69,15 @@ public class Desk extends Composite {
 
     public void setNavBarWidget(Widget navBarWidget) {
 	navBar.setWidget(navBarWidget);
+    }
+
+    @UiHandler( { "editBtn", "logoutBtn" })
+    void onClick(ClickEvent e) {
+	if (e.getSource() == editBtn) {
+	    // Wise_gui.getInstance().editWsdl();
+	} else if (e.getSource() == logoutBtn) {
+	    Wise_gui.getInstance().logout();
+	}
     }
 
 }

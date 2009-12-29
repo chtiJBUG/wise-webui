@@ -33,8 +33,6 @@ import org.jboss.wise.gui.shared.ServiceWsdl;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -216,27 +214,6 @@ public class Wise_gui implements EntryPoint {
      */
     public List<Operation> getOperations() {
 	return operations;
-    }
-
-    private class BackLink extends HTMLPanel implements HasClickHandlers {
-
-	/**
-	 * @param html
-	 */
-	public BackLink(String html) {
-	    super("span", html);
-	    addStyleName("backlink");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
-	 */
-	public HandlerRegistration addClickHandler(ClickHandler handler) {
-	    return addDomHandler(handler, ClickEvent.getType());
-	}
-
     }
 
 }

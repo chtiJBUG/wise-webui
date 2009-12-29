@@ -25,6 +25,7 @@
 			right: 0px;
 			bottom: 0px;
 		}
+		
 		.navBar {
 			position: absolute;
 			top: 0px;
@@ -35,15 +36,16 @@
 			font-weight: bold;
 		}
 	</ui:style>
+	<ui:with field='res' type='org.jboss.wise.gui.client.Resources' />
 	<g:HTMLPanel>
 		<div id="toolbar"
 			style="position: absolute; top:0px; left:0px; right:0px; height: 24px; border-bottom-style:solid; border-bottom-width:1px;">
-			<g:SimplePanel styleName='{style.navBar}' ui:field='navBar'/>
+			<g:SimplePanel styleName='{style.navBar}' ui:field='navBar' />
 			<div
 				style="position: absolute; top:0px; width:50%; right:0px; bottom: 0px; text-align:right;">
 				<span style="margin-right: 10px;">Welcome mail@domain.com</span>
-				<img src="edit.png" style="vertical-align:middle; cursor:pointer;" />
-				<img src="logout.png" style="vertical-align:middle; cursor:pointer;" />
+				<g:Image resource='{res.edit}' ui:field='editBtn' />
+				<g:Image resource='{res.logout}' ui:field='logoutBtn' />
 			</div>
 		</div>
 		<g:SimplePanel ui:field="content" styleName="{style.content}" />

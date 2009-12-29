@@ -13,11 +13,6 @@ h1 {
 	font-size: 16pt;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-	width: 400px;
-}
-
 .dialogVPanel {
 	margin: 5px;
 }
@@ -94,6 +89,7 @@ div.content table td.last {
 	border-right-style: none !important;
 	border-right-color: #000 !important;
 }
+
 .backlink {
     color: #69E;
     cursor: pointer;

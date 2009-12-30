@@ -73,6 +73,8 @@ public class Wise_gui implements EntryPoint {
 
     private String navBarRootId = HTMLPanel.createUniqueId();
 
+    private WiseServiceProxy wiseService = new WiseServiceProxy();
+
     public void onModuleLoad() {
 	instance = this;
 	login();

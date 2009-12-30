@@ -30,7 +30,7 @@ import java.util.Date;
  */
 public class ServiceWsdl implements Serializable {
 
-    private static final long serialVersionUID = -4647111183719034021L;
+    private static final long serialVersionUID = -6561249553718237420L;
 
     private String name;
 

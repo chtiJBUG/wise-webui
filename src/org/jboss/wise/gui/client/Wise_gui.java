@@ -33,6 +33,7 @@ import org.jboss.wise.gui.shared.ServiceWsdl;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -64,6 +65,8 @@ public class Wise_gui implements EntryPoint {
     private EndpointSelection endpointSelectionDialog = null;
 
     private WsdlBrowser wsdlBrowser = null;
+
+    private String loginMail = null;
 
     private ServiceWsdl selectedWsdl = null;
 
@@ -98,6 +101,31 @@ public class Wise_gui implements EntryPoint {
 	passwordReminderDialog.show();
     }
 
+    public void sendPasswordReminder(final String mail) {
+	assert passwordReminderDialog != null;
+	wiseService.sendReminder(mail, new AsyncCallback<Boolean>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Boolean result) {
+		if (result) {
+		    passwordReminderDialog.hide();
+		    login();
+		} else {
+		    Alert.error(Constants.INSTANCE.wrongReminderMail());
+		}
+	    }
+	});
+
+    }
+
+    public void passwordReminderClosed() {
+	assert passwordReminderDialog != null;
+	passwordReminderDialog.hide();
+	login();
+    }
+
     public void register() {
 	if (registerDialog == null) {
 	    registerDialog = new RegisterDialog();
@@ -105,8 +133,46 @@ public class Wise_gui implements EntryPoint {
 	registerDialog.show();
     }
 
-    public boolean verifyLogin(String mail, String password) {
-	return true;
+    public void confirmRegistration(final String mail, final String password) {
+	assert registerDialog != null;
+	wiseService.register(mail, password, new AsyncCallback<Boolean>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Boolean result) {
+		if (result) {
+		    registerDialog.hide();
+		    login();
+		} else {
+		    Alert.error(Constants.INSTANCE.registerError());
+		}
+	    }
+
+	});
+    }
+
+    public void cancelRegistration() {
+	registerDialog.hide();
+	login();
+    }
+
+    public void verifyLogin(final String mail, final String password) {
+	wiseService.login(mail, password, new AsyncCallback<Boolean>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Boolean result) {
+		if (result) {
+		    Wise_gui.this.loginMail = mail;
+		    loginDialog.hide();
+		    startDesk();
+		} else {
+		    Alert.error(Constants.INSTANCE.loginError());
+		}
+	    }
+	});
     }
 
     public void editWsdl() {
@@ -135,7 +201,16 @@ public class Wise_gui implements EntryPoint {
 	    desk = null;
 	    wsdlList = null;
 	}
-	login();
+	wiseService.logout(new AsyncCallback<Void>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Void result) {
+		loginMail = null;
+		login();
+	    }
+	});
     }
 
     public void startDesk() {
@@ -143,6 +218,8 @@ public class Wise_gui implements EntryPoint {
 	    desk = new Desk();
 	    RootPanel.get("main").add(desk);
 	}
+	assert loginMail != null;
+	desk.setMail(loginMail);
 	savedWsdlList = new ArrayList<ServiceWsdl>();
 	for (int i = 0; i < 100; i++) {
 	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));

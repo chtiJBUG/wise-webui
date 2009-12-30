@@ -49,17 +49,17 @@ public class WiseServiceProxy implements WiseServiceAsync {
      * @see org.jboss.wise.gui.shared.WiseServiceAsync#register(java.lang.String,
      *      java.lang.String, com.google.gwt.user.client.rpc.AsyncCallback)
      */
-    public void register(String email, String password, AsyncCallback<Boolean> callback) {
-	assert email != null;
-	assert email.length() > 0;
+    public void register(final String mail, final String password, AsyncCallback<Boolean> callback) {
+	assert mail != null;
+	assert mail.length() > 0;
 	assert password != null;
 	assert password.length() > 0;
 	assert loggedUser == null;
-	if (users.get(email) != null) {
+	if (users.get(mail) != null) {
 	    callback.onSuccess(false);
 	} else {
 	    UserData newUser = new UserData(password);
-	    users.put(email, newUser);
+	    users.put(mail, newUser);
 	    callback.onSuccess(true);
 	}
     }
@@ -70,8 +70,8 @@ public class WiseServiceProxy implements WiseServiceAsync {
      * @see org.jboss.wise.gui.shared.WiseServiceAsync#sendReminder(java.lang.String,
      *      com.google.gwt.user.client.rpc.AsyncCallback)
      */
-    public void sendReminder(String email, AsyncCallback<Boolean> callback) {
-	if (users.get(email) != null) {
+    public void sendReminder(final String mail, AsyncCallback<Boolean> callback) {
+	if (users.get(mail) != null) {
 	    callback.onSuccess(true);
 	} else {
 	    callback.onSuccess(false);
@@ -84,9 +84,9 @@ public class WiseServiceProxy implements WiseServiceAsync {
      * @see org.jboss.wise.gui.shared.WiseServiceAsync#login(java.lang.String,
      *      java.lang.String, com.google.gwt.user.client.rpc.AsyncCallback)
      */
-    public void login(String email, String password, AsyncCallback<Boolean> callback) {
+    public void login(final String mail, final String password, AsyncCallback<Boolean> callback) {
 	assert loggedUser == null;
-	UserData user = users.get(email);
+	UserData user = users.get(mail);
 	boolean logged = (user != null && user.verifyPassword(password));
 	if (logged)
 	    loggedUser = user;
@@ -101,6 +101,7 @@ public class WiseServiceProxy implements WiseServiceAsync {
     public void logout(AsyncCallback<Void> callback) {
 	assert loggedUser != null;
 	loggedUser = null;
+	callback.onSuccess(null);
     }
 
     /**
@@ -119,7 +120,7 @@ public class WiseServiceProxy implements WiseServiceAsync {
      * @see org.jboss.wise.gui.shared.WiseServiceAsync#addWsdl(org.jboss.wise.gui.shared.ServiceWsdl,
      *      com.google.gwt.user.client.rpc.AsyncCallback)
      */
-    public void addWsdl(ServiceWsdl wsdl, AsyncCallback<Long> callback) {
+    public void addWsdl(final ServiceWsdl wsdl, AsyncCallback<Long> callback) {
 	assert loggedUser != null;
 	callback.onSuccess(loggedUser.add(wsdl));
     }
@@ -131,7 +132,7 @@ public class WiseServiceProxy implements WiseServiceAsync {
      *      org.jboss.wise.gui.shared.ServiceWsdl,
      *      com.google.gwt.user.client.rpc.AsyncCallback)
      */
-    public void updateWsdl(long id, ServiceWsdl wsdl, AsyncCallback<Boolean> callback) {
+    public void updateWsdl(long id, final ServiceWsdl wsdl, AsyncCallback<Boolean> callback) {
 	assert loggedUser != null;
 	callback.onSuccess(loggedUser.updateWsdl(id, wsdl));
     }
@@ -160,7 +161,7 @@ public class WiseServiceProxy implements WiseServiceAsync {
 	    wsdlList = new HashMap<Long, ServiceWsdl>();
 	}
 
-	public boolean verifyPassword(String password) {
+	public boolean verifyPassword(final String password) {
 	    return this.password.equals(password);
 	}
 
@@ -168,13 +169,13 @@ public class WiseServiceProxy implements WiseServiceAsync {
 	    return wsdlList;
 	}
 
-	public long add(ServiceWsdl wsdl) {
+	public long add(final ServiceWsdl wsdl) {
 	    long id = nextWsdlId++;
 	    wsdlList.put(Long.valueOf(id), wsdl);
 	    return id;
 	}
 
-	public boolean updateWsdl(long id, ServiceWsdl wsdl) {
+	public boolean updateWsdl(long id, final ServiceWsdl wsdl) {
 	    if (wsdlList.get(id) != null) {
 		wsdlList.put(id, wsdl);
 		return true;

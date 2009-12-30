@@ -21,11 +21,22 @@
 		.form {
 			empty-cells: show;
 		}
+		
+		.info {
+			font-style: italic;
+			word-wrap: break-word;
+		}
 	</ui:style>
-	<g:DialogBox autoHide='false' modal='true' animationEnabled='true'>
+	<g:DialogBox autoHide='false' modal='true'
+		animationEnabled='true'>
 		<g:caption>NEW ACCOUNT</g:caption>
 		<g:HTMLPanel>
 			<table class='{style.form}' width='100%'>
+                <tr>
+                    <td colspan='2' class='{style.info}'><div style='width: 300px'>Note: this UI is only a mockup of what
+                        will be WiseGUI when it will be completed. No registration really
+                        occurs. All data is lost when the page is closed or refreshed.</div></td>
+                </tr>
 				<tr>
 					<td>Mail:</td>
 					<td>

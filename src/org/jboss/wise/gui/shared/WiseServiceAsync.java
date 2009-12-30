@@ -30,19 +30,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface WiseServiceAsync {
 
-    public void register(String email, String password, AsyncCallback<Boolean> callback);
+    public void register(final String mail, String password, AsyncCallback<Boolean> callback);
 
-    public void sendReminder(String email, AsyncCallback<Boolean> callback);
+    public void sendReminder(final String mail, AsyncCallback<Boolean> callback);
 
-    public void login(String email, String password, AsyncCallback<Boolean> callback);
+    public void login(final String mail, final String password, AsyncCallback<Boolean> callback);
 
     public void logout(AsyncCallback<Void> callback);
 
     public void getWsdlList(AsyncCallback<Map<Long, ServiceWsdl>> callback);
 
-    public void addWsdl(ServiceWsdl wsdl, AsyncCallback<Long> callback);
+    public void addWsdl(final ServiceWsdl wsdl, AsyncCallback<Long> callback);
 
-    public void updateWsdl(long id, ServiceWsdl wsdl, AsyncCallback<Boolean> callback);
+    public void updateWsdl(long id, final ServiceWsdl wsdl, AsyncCallback<Boolean> callback);
 
     public void removeWsdl(long id, AsyncCallback<Boolean> callback);
 

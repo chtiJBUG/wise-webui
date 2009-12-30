@@ -42,6 +42,14 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
 
     String deleteWsdlMessage();
 
+    String loginError();
+
     String logoutMessage();
+
+    String wrongReminderMail();
+
+    String registerError();
+
+    String applicationException();
 
 }

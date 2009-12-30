@@ -32,19 +32,19 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("wise")
 public interface WiseService extends RemoteService {
 
-    public boolean register(String email, String password);
+    public boolean register(final String mail, final String password);
 
-    public boolean sendReminder(String email);
+    public boolean sendReminder(final String mail);
 
-    public boolean login(String email, String password);
+    public boolean login(final String mail, String password);
 
     public void logout();
 
     public Map<Long, ServiceWsdl> getWsdlList();
 
-    public long addWsdl(ServiceWsdl wsdl);
+    public long addWsdl(final ServiceWsdl wsdl);
 
-    public boolean updateWsdl(long id, ServiceWsdl wsdl);
+    public boolean updateWsdl(long id, final ServiceWsdl wsdl);
 
     public boolean removeWsdl(long id);
 

@@ -87,6 +87,11 @@ public class RegisterDialog {
 	}
     }
 
+    public void hide() {
+	if (dialog.isShowing())
+	    dialog.hide();
+    }
+
     private void enableButtons() {
 	boolean fieldsNotEmpty = mail.getText().length() > 0 && confirmMail.getText().length() > 0 && password.getText().length() > 0 && confirmPassword.getText().length() > 0;
 	boolean mailConfirmed = mail.getText().equals(confirmMail.getText());
@@ -106,11 +111,9 @@ public class RegisterDialog {
     @UiHandler( { "okBtn", "cancelBtn" })
     void handleClick(ClickEvent e) {
 	if (e.getSource() == okBtn) {
-	    dialog.hide();
-	    Wise_gui.getInstance().login();
+	    Wise_gui.getInstance().confirmRegistration(mail.getText(), password.getText());
 	} else if (e.getSource() == cancelBtn) {
-	    dialog.hide();
-	    Wise_gui.getInstance().login();
+	    Wise_gui.getInstance().cancelRegistration();
 	}
     }
 

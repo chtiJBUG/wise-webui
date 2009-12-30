@@ -82,15 +82,16 @@ public class LoginDialog {
 	}
     }
 
+    public void hide() {
+	if (dialog.isShowing()) {
+	    dialog.hide();
+	}
+    }
+
     @UiHandler( { "loginBtn", "registerBtn", "forgotPasswordBtn" })
     void handleClick(ClickEvent e) {
 	if (e.getSource() == loginBtn) {
-	    if (Wise_gui.getInstance().verifyLogin(mail.getText(), password.getText())) {
-		dialog.hide();
-		Wise_gui.getInstance().startDesk();
-	    } else {
-		// TODO: display wrong user or password message
-	    }
+	    Wise_gui.getInstance().verifyLogin(mail.getText(), password.getText());
 	} else if (e.getSource() == registerBtn) {
 	    dialog.hide();
 	    Wise_gui.getInstance().register();

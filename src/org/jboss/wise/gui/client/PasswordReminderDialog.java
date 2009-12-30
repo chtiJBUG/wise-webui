@@ -71,14 +71,18 @@ public class PasswordReminderDialog {
 	}
     }
 
+    public void hide() {
+	if (dialog.isShowing()) {
+	    dialog.hide();
+	}
+    }
+
     @UiHandler( { "sendBtn", "cancelBtn" })
     void onClick(ClickEvent e) {
 	if (e.getSource() == sendBtn) {
-	    dialog.hide();
-	    Wise_gui.getInstance().login();
+	    Wise_gui.getInstance().sendPasswordReminder(mail.getText());
 	} else if (e.getSource() == cancelBtn) {
-	    dialog.hide();
-	    Wise_gui.getInstance().login();
+	    Wise_gui.getInstance().passwordReminderClosed();
 	}
     }
 

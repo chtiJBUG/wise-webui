@@ -43,7 +43,7 @@
 			<g:SimplePanel styleName='{style.navBar}' ui:field='navBar' />
 			<div
 				style="position: absolute; top:0px; width:50%; right:0px; bottom: 0px; text-align:right;">
-				<span style="margin-right: 10px;">Welcome mail@domain.com</span>
+				<span style="margin-right: 10px;">Welcome <span ui:field='mail'></span></span>
 				<g:Image resource='{res.edit}' ui:field='editBtn' />
 				<g:Image resource='{res.logout}' ui:field='logoutBtn' />
 			</div>

@@ -25,6 +25,7 @@ package org.jboss.wise.gui.client;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.wise.gui.client.Alert.Reply;
 import org.jboss.wise.gui.shared.ServiceWsdl;
 
 import com.google.gwt.core.client.GWT;
@@ -143,7 +144,13 @@ public class WsdlList extends Composite {
     @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn" })
     void onClick(ClickEvent e) {
 	if (e.getSource() == deleteBtn) {
-
+	    Alert.caution(Constants.INSTANCE.deleteWsdlMessage(), new Alert.Listener() {
+		public void onReply(Alert origin, Reply r) {
+		    if (r == Alert.Reply.OK) {
+			Wise_gui.getInstance().deleteWsdl();
+		    }
+		}
+	    });
 	} else if (e.getSource() == editBtn) {
 	    Wise_gui.getInstance().editWsdl();
 	} else if (e.getSource() == newBtn) {

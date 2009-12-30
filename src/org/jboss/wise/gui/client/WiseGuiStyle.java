@@ -28,6 +28,18 @@ import com.google.gwt.resources.client.CssResource;
  */
 public interface WiseGuiStyle extends CssResource {
 
+    String darkFrameColor();
+
+    String lightFrameColor();
+
+    String backgroundColor();
+
+    String boldLineColor();
+
+    String activeTextColor();
+
+    String alertContentWidth();
+
     String btnImage();
 
 }

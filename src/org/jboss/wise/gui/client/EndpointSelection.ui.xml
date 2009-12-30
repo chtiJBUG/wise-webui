@@ -23,7 +23,7 @@
             border-width: 1px; border-color: #ccc; border-style: solid;
         }
     </ui:style>
-    <g:DialogBox autoHide='false' modal='true'>
+    <g:DialogBox autoHide='false' modal='true' animationEnabled='true'>
         <g:caption>ENDPOINT</g:caption>
         <g:HTMLPanel>
             <table width='100%'>

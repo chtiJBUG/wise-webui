@@ -21,6 +21,8 @@
  */
 package org.jboss.wise.gui.client;
 
+import org.jboss.wise.gui.client.Alert.Reply;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -76,7 +78,13 @@ public class Desk extends Composite {
 	if (e.getSource() == editBtn) {
 	    // Wise_gui.getInstance().editWsdl();
 	} else if (e.getSource() == logoutBtn) {
-	    Wise_gui.getInstance().logout();
+	    Alert.caution(Constants.INSTANCE.logoutMessage(), new Alert.Listener() {
+		public void onReply(Alert origin, Reply r) {
+		    if (r == Alert.Reply.OK) {
+			Wise_gui.getInstance().logout();
+		    }
+		}
+	    });
 	}
     }
 

@@ -75,6 +75,10 @@ public class RegisterDialog {
 
     public void show() {
 	if (!dialog.isShowing()) {
+	    mail.setText("");
+	    confirmMail.setText("");
+	    password.setText("");
+	    confirmPassword.setText("");
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();

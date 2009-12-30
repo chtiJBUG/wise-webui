@@ -22,7 +22,7 @@
 			empty-cells: show;
 		}
 	</ui:style>
-	<g:DialogBox autoHide='false' modal='true'>
+	<g:DialogBox autoHide='false' modal='true' animationEnabled='true'>
 		<g:caption>NEW ACCOUNT</g:caption>
 		<g:HTMLPanel>
 			<table class='{style.form}' width='100%'>

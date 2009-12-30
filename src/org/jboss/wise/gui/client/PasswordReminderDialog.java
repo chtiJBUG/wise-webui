@@ -62,6 +62,7 @@ public class PasswordReminderDialog {
     public void show() {
 	mail.setText("");
 	if (!dialog.isShowing()) {
+	    mail.setText("");
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();

@@ -22,23 +22,26 @@
 package org.jboss.wise.gui.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
 
 /**
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
-public interface Resources extends ClientBundle {
+public interface Constants extends com.google.gwt.i18n.client.Constants {
 
-    Resources INSTANCE = GWT.create(Resources.class);
+    Constants INSTANCE = GWT.create(Constants.class);
 
-    @Source("Wise_gui.style.css")
-    WiseGuiStyle wiseGuiStyle();
+    String okBtnText();
 
-    @Source("org/jboss/wise/gui/client/res/edit.png")
-    ImageResource edit();
+    String cancelBtnText();
 
-    @Source("org/jboss/wise/gui/client/res/logout.png")
-    ImageResource logout();
+    String noteDialogTitle();
+
+    String errorDialogTitle();
+
+    String warningDialogTitle();
+
+    String deleteWsdlMessage();
+
+    String logoutMessage();
 
 }

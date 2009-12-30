@@ -72,6 +72,8 @@ public class LoginDialog {
 
     public void show() {
 	if (!dialog.isShowing()) {
+	    mail.setText("");
+	    password.setText("");
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();
@@ -85,7 +87,7 @@ public class LoginDialog {
 	if (e.getSource() == loginBtn) {
 	    if (Wise_gui.getInstance().verifyLogin(mail.getText(), password.getText())) {
 		dialog.hide();
-		Wise_gui.getInstance().wsdlList();
+		Wise_gui.getInstance().startDesk();
 	    } else {
 		// TODO: display wrong user or password message
 	    }

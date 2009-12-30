@@ -104,14 +104,6 @@ public class Wise_gui implements EntryPoint {
     }
 
     public boolean verifyLogin(String mail, String password) {
-	if (desk == null) {
-	    desk = new Desk();
-	    RootPanel.get("main").add(desk);
-	}
-	savedWsdlList = new ArrayList<ServiceWsdl>();
-	for (int i = 0; i < 100; i++) {
-	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
-	}
 	return true;
     }
 
@@ -129,6 +121,11 @@ public class Wise_gui implements EntryPoint {
 	wsdlEditDialog.show();
     }
 
+    public void deleteWsdl() {
+	assert selectedWsdl != null;
+	// TODO: remove wsdl
+    }
+
     public void logout() {
 	if (desk != null) {
 	    RootPanel.get("main").remove(desk);
@@ -137,6 +134,19 @@ public class Wise_gui implements EntryPoint {
 	    wsdlList = null;
 	}
 	login();
+    }
+
+    public void startDesk() {
+	if (desk == null) {
+	    desk = new Desk();
+	    RootPanel.get("main").add(desk);
+	}
+	savedWsdlList = new ArrayList<ServiceWsdl>();
+	for (int i = 0; i < 100; i++) {
+	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
+	}
+	selectedWsdl = null;
+	wsdlList();
     }
 
     public void wsdlList() {

@@ -23,11 +23,10 @@
 package org.jboss.wise.gui.client;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.wise.gui.shared.Operation;
-import org.jboss.wise.gui.shared.ServiceEndpoint;
 import org.jboss.wise.gui.shared.ServiceWsdl;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -54,11 +53,11 @@ public class Wise_gui implements EntryPoint {
 
     private Desk desk = null;
 
-    private WsdlList wsdlList = null;
+    private WsdlList wsdlListWidget = null;
+
+    private Map<Long, ServiceWsdl> wsdlList = null;
 
     private WsdlEditDialog wsdlEditDialog = null;
-
-    private List<ServiceWsdl> savedWsdlList = null;
 
     private WsdlRetrieve wsdlRetrieveDialog = null;
 
@@ -68,9 +67,7 @@ public class Wise_gui implements EntryPoint {
 
     private String loginMail = null;
 
-    private ServiceWsdl selectedWsdl = null;
-
-    private ServiceEndpoint serviceEndpoint = null;
+    private Long selectedWsdlId = null;
 
     private List<Operation> operations = null;
 
@@ -164,6 +161,7 @@ public class Wise_gui implements EntryPoint {
 	    }
 
 	    public void onSuccess(Boolean result) {
+		assert result != null;
 		if (result) {
 		    Wise_gui.this.loginMail = mail;
 		    loginDialog.hide();
@@ -179,19 +177,77 @@ public class Wise_gui implements EntryPoint {
 	if (wsdlEditDialog == null) {
 	    wsdlEditDialog = new WsdlEditDialog();
 	}
+	wsdlEditDialog.editServiceWsdl(selectedWsdlId);
 	wsdlEditDialog.show();
+    }
+
+    public void saveEditedWsdl() {
+	final ServiceWsdl updatedWsdl = wsdlEditDialog.getServiceWsdl();
+	if (wsdlEditDialog.getServiceWsdlId() != null) {
+	    wiseService.updateWsdl(wsdlEditDialog.getServiceWsdlId(), updatedWsdl, new AsyncCallback<Boolean>() {
+		public void onFailure(Throwable caught) {
+		    Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		}
+
+		public void onSuccess(Boolean result) {
+		    assert result != null;
+		    if (result) {
+			wsdlEditDialog.hide();
+			wsdlList.put(selectedWsdlId, updatedWsdl);
+			wsdlListWidget.refreshRow(selectedWsdlId);
+		    } else {
+			Alert.error(Constants.INSTANCE.loginError());
+		    }
+		}
+	    });
+	} else {
+	    wiseService.addWsdl(updatedWsdl, new AsyncCallback<Long>() {
+		public void onFailure(Throwable caught) {
+		    Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		}
+
+		public void onSuccess(Long result) {
+		    assert result != null;
+		    selectedWsdlId = result;
+		    wsdlEditDialog.hide();
+		    wsdlList.put(result, updatedWsdl);
+		    wsdlListWidget.refreshRow(result);
+		    wsdlListWidget.select(result);
+		}
+	    });
+	}
+
+    }
+
+    public void discardEditedWsdl() {
+	wsdlEditDialog.hide();
     }
 
     public void newWsdl() {
 	if (wsdlEditDialog == null) {
 	    wsdlEditDialog = new WsdlEditDialog();
 	}
+	wsdlEditDialog.editServiceWsdl(null);
 	wsdlEditDialog.show();
     }
 
     public void deleteWsdl() {
-	assert selectedWsdl != null;
-	// TODO: remove wsdl
+	assert selectedWsdlId != null;
+	wiseService.removeWsdl(selectedWsdlId, new AsyncCallback<Boolean>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Boolean result) {
+		assert result != null;
+		if (result) {
+		    selectedWsdlId = null;
+		    wsdlListWidget.refresh();
+		} else {
+		    Alert.error(Constants.INSTANCE.deleteWsdlError());
+		}
+	    }
+	});
     }
 
     public void logout() {
@@ -199,7 +255,7 @@ public class Wise_gui implements EntryPoint {
 	    RootPanel.get("main").remove(desk);
 	    desk.setContentWidget(null);
 	    desk = null;
-	    wsdlList = null;
+	    wsdlListWidget = null;
 	}
 	wiseService.logout(new AsyncCallback<Void>() {
 	    public void onFailure(Throwable caught) {
@@ -220,37 +276,44 @@ public class Wise_gui implements EntryPoint {
 	}
 	assert loginMail != null;
 	desk.setMail(loginMail);
-	savedWsdlList = new ArrayList<ServiceWsdl>();
-	for (int i = 0; i < 100; i++) {
-	    savedWsdlList.add(new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
-	}
-	selectedWsdl = null;
-	wsdlList();
+	selectedWsdlId = null;
+	showWsdlList();
     }
 
-    public void wsdlList() {
-	if (wsdlList == null) {
-	    wsdlList = new WsdlList();
+    public void showWsdlList() {
+	if (wsdlListWidget == null) {
+	    wsdlListWidget = new WsdlList();
 	}
-	serviceEndpoint = null;
-	operations = null;
-	desk.setContentWidget(wsdlList);
-	desk.setNavBarWidget(new HTMLPanel("span", "WISEGui"));
+	wiseService.getWsdlList(new AsyncCallback<Map<Long, ServiceWsdl>>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Map<Long, ServiceWsdl> result) {
+		wsdlList = result;
+		wsdlListWidget.refresh();
+		operations = null;
+		desk.setContentWidget(wsdlListWidget);
+		desk.setNavBarWidget(new HTMLPanel("span", "WISEGui"));
+	    }
+	});
+
     }
 
     public void retrieveWsdl() {
 	if (wsdlRetrieveDialog == null) {
 	    wsdlRetrieveDialog = new WsdlRetrieve();
 	}
-	wsdlRetrieveDialog.show(Wise_gui.getInstance().getSelectedWsdl());
+	assert selectedWsdlId != null;
+	wsdlRetrieveDialog.show();
     }
 
     public void selectEndpoint() {
 	if (endpointSelectionDialog == null) {
 	    endpointSelectionDialog = new EndpointSelection();
 	}
-	serviceEndpoint = new ServiceEndpoint(selectedWsdl);
-	endpointSelectionDialog.show(serviceEndpoint);
+	assert selectedWsdlId != null;
+	endpointSelectionDialog.show();
     }
 
     public void operations() {
@@ -264,12 +327,12 @@ public class Wise_gui implements EntryPoint {
 	desk.setContentWidget(wsdlBrowser);
 	StringBuilder sb = new StringBuilder();
 	sb.append("<span id='" + navBarRootId + "'></span> > ");
-	sb.append(serviceEndpoint.getWsdl().getName());
+	// sb.append(serviceEndpoint.getWsdl().getName());
 	HTMLPanel navBar = new HTMLPanel("span", sb.toString());
 	BackLink backLink = new BackLink("WISEGui");
 	backLink.addClickHandler(new ClickHandler() {
 	    public void onClick(ClickEvent event) {
-		wsdlList();
+		showWsdlList();
 	    }
 	});
 	navBar.addAndReplaceElement(backLink, navBarRootId);
@@ -277,25 +340,25 @@ public class Wise_gui implements EntryPoint {
     }
 
     /**
-     * @return savedWsdlList
+     * @return wsdlList
      */
-    public List<ServiceWsdl> getSavedWsdlList() {
-	return savedWsdlList;
+    public Map<Long, ServiceWsdl> getWsdlList() {
+	return wsdlList;
     }
 
     /**
-     * @param selectedWsdl
-     *            Sets selectedWsdl to the specified value.
+     * @param selectedWsdlId
+     *            Sets selectedWsdlId to the specified value.
      */
-    public void setSelectedWsdl(ServiceWsdl selectedWsdl) {
-	this.selectedWsdl = selectedWsdl;
+    public void setSelectedWsdlId(Long selectedWsdlId) {
+	this.selectedWsdlId = selectedWsdlId;
     }
 
     /**
-     * @return selectedWsdl
+     * @return selectedWsdlId
      */
-    public ServiceWsdl getSelectedWsdl() {
-	return selectedWsdl;
+    public Long getSelectedWsdlId() {
+	return selectedWsdlId;
     }
 
     /**

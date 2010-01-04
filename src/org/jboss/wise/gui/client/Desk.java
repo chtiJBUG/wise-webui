@@ -54,8 +54,8 @@ public class Desk extends Composite {
     @UiField
     SimplePanel navBar;
 
-    @UiField
-    Image editBtn;
+    // @UiField
+    // Image editBtn;
 
     @UiField
     Image logoutBtn;
@@ -65,7 +65,7 @@ public class Desk extends Composite {
 
     public Desk() {
 	initWidget(uiBinder.createAndBindUi(this));
-	editBtn.addStyleName(Resources.INSTANCE.wiseGuiStyle().btnImage());
+	// editBtn.addStyleName(Resources.INSTANCE.wiseGuiStyle().btnImage());
 	logoutBtn.addStyleName(Resources.INSTANCE.wiseGuiStyle().btnImage());
     }
 
@@ -81,11 +81,12 @@ public class Desk extends Composite {
 	navBar.setWidget(navBarWidget);
     }
 
-    @UiHandler( { "editBtn", "logoutBtn" })
+    @UiHandler( { "logoutBtn" })
     void onClick(ClickEvent e) {
-	if (e.getSource() == editBtn) {
-	    // Wise_gui.getInstance().editWsdl();
-	} else if (e.getSource() == logoutBtn) {
+	// if (e.getSource() == editBtn) {
+	// Wise_gui.getInstance().editWsdl();
+	// } else
+	if (e.getSource() == logoutBtn) {
 	    Alert.caution(Constants.INSTANCE.logoutMessage(), new Alert.Listener() {
 		public void onReply(Alert origin, Reply r) {
 		    if (r == Alert.Reply.OK) {

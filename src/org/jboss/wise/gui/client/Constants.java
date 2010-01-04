@@ -50,6 +50,14 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
 
     String registerError();
 
+    String saveWsdlError();
+
+    String deleteWsdlError();
+
+    String editWsdlDialogCaption();
+
+    String newWsdlDialogCaption();
+
     String applicationException();
 
 }

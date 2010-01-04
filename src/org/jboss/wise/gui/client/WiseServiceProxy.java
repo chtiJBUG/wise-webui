@@ -21,6 +21,7 @@
  */
 package org.jboss.wise.gui.client;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class WiseServiceProxy implements WiseServiceAsync {
 
     public WiseServiceProxy() {
 	users = new HashMap<String, UserData>();
+	users.put("a", new UserData("a")); // <- test login
 	loggedUser = null;
     }
 
@@ -159,6 +161,9 @@ public class WiseServiceProxy implements WiseServiceAsync {
 	public UserData(String password) {
 	    this.password = password;
 	    wsdlList = new HashMap<Long, ServiceWsdl>();
+	    for (int i = 0; i < 10; i++) {
+		wsdlList.put(Long.valueOf(nextWsdlId++), new ServiceWsdl("Service " + i, "http://HOST " + i + ":8080/Service1WS/Service1WSBean?wsdl", "This tool may be...", new Date()));
+	    }
 	}
 
 	public boolean verifyPassword(final String password) {

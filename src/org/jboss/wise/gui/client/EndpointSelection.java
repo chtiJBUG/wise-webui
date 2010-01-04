@@ -21,8 +21,6 @@
  */
 package org.jboss.wise.gui.client;
 
-import org.jboss.wise.gui.shared.ServiceEndpoint;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
@@ -76,12 +74,13 @@ public class EndpointSelection {
 	okBtn.addStyleName("gwt-Button");
     }
 
-    public void show(ServiceEndpoint endpoint) {
+    public void show() {
 	if (!dialog.isShowing()) {
-	    serviceName.setInnerText(endpoint.getWsdl().getName());
-	    description.setInnerText(endpoint.getWsdl().getName() + ":" + endpoint.getWsdl().getNotes());
-	    url.setInnerText(endpoint.getWsdl().getUrl());
-	    customUrl.setText(endpoint.getCustomUrl());
+	    // serviceName.setInnerText(endpoint.getWsdl().getName());
+	    // description.setInnerText(endpoint.getWsdl().getName() + ":" +
+	    // endpoint.getWsdl().getNotes());
+	    // url.setInnerText(endpoint.getWsdl().getUrl());
+	    // customUrl.setText(endpoint.getCustomUrl());
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();

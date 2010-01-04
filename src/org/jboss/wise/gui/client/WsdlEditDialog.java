@@ -22,8 +22,14 @@
 
 package org.jboss.wise.gui.client;
 
+import java.util.Date;
+
+import org.jboss.wise.gui.shared.ServiceWsdl;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -59,22 +65,21 @@ public class WsdlEditDialog {
     @UiField
     Button okBtn;
 
+    private ServiceWsdl serviceWsdl = null;
+
+    private Long serviceWsdlId = null;
+
     public WsdlEditDialog() {
 	dialog = uiBinder.createAndBindUi(this);
 	okBtn.addStyleName("gwt-Button");
     }
 
-    @UiHandler( { "cancelBtn", "okBtn" })
-    void onClick(ClickEvent e) {
-	if (e.getSource() == cancelBtn) {
-	    dialog.hide();
-	} else if (e.getSource() == okBtn) {
-	    dialog.hide();
-	}
-    }
-
     public void show() {
 	if (!dialog.isShowing()) {
+	    assert serviceWsdl != null;
+	    name.setText(this.serviceWsdl.getName());
+	    description.setText(this.serviceWsdl.getNotes());
+	    wsdl.setText(this.serviceWsdl.getUrl());
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();
@@ -83,7 +88,58 @@ public class WsdlEditDialog {
 	}
     }
 
-    private void enableButtons() {
+    public void hide() {
+	if (dialog.isShowing())
+	    dialog.hide();
+    }
 
+    private void enableButtons() {
+	String nameText = name.getText();
+	String descriptionText = description.getText();
+	String wsdlText = wsdl.getText();
+	okBtn.setEnabled(nameText.length() > 0 && descriptionText.length() > 0 && wsdlText.length() > 0);
+    }
+
+    @UiHandler( { "cancelBtn", "okBtn" })
+    void onClick(ClickEvent e) {
+	if (e.getSource() == cancelBtn) {
+	    Wise_gui.getInstance().discardEditedWsdl();
+	} else if (e.getSource() == okBtn) {
+	    serviceWsdl = new ServiceWsdl(name.getText(), wsdl.getText(), description.getText(), new Date());
+	    Wise_gui.getInstance().saveEditedWsdl();
+	}
+    }
+
+    @UiHandler( { "name", "description", "wsdl" })
+    void handleBlur(BlurEvent e) {
+	enableButtons();
+    }
+
+    @UiHandler( { "name", "description", "wsdl" })
+    void handleUpEvent(KeyUpEvent e) {
+	enableButtons();
+    }
+
+    /**
+     * @return serviceWsdl
+     */
+    public ServiceWsdl getServiceWsdl() {
+	return serviceWsdl;
+    }
+
+    /**
+     * @return serviceWsdlId
+     */
+    public Long getServiceWsdlId() {
+	return serviceWsdlId;
+    }
+
+    public void editServiceWsdl(Long serviceWsdlId) {
+	this.serviceWsdlId = serviceWsdlId;
+	if (this.serviceWsdlId != null) {
+	    serviceWsdl = Wise_gui.getInstance().getWsdlList().get(serviceWsdlId);
+	} else {
+	    serviceWsdl = new ServiceWsdl("", "", "", new Date());
+	}
     }
 }

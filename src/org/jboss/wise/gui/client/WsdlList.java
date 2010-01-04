@@ -23,7 +23,8 @@
 package org.jboss.wise.gui.client;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jboss.wise.gui.client.Alert.Reply;
 import org.jboss.wise.gui.shared.ServiceWsdl;
@@ -83,39 +84,60 @@ public class WsdlList extends Composite {
 
     private RowWidget selectedRow = null;
 
+    private Map<Long, RowWidget> rowWidgets = null;
+
     public WsdlList() {
 	panel = uiBinder.createAndBindUi(this);
 	initWidget(panel);
 	contentId = HTMLPanel.createUniqueId();
 	content.setId(contentId);
-	setList(Wise_gui.getInstance().getSavedWsdlList());
+	// setList(Wise_gui.getInstance().getSavedWsdlList());
 	enableButtons();
     }
 
-    private void setList(List<ServiceWsdl> list) {
+    public void refresh() {
+	Map<Long, ServiceWsdl> list = Wise_gui.getInstance().getWsdlList();
 	NodeList<TableRowElement> rows = content.getRows();
 	if (rows != null) {
 	    while (rows.getLength() > 0) {
 		content.deleteRow(-1);
 	    }
 	}
-	int i = 0;
-	for (ServiceWsdl wsdl : list) {
-	    RowWidget rw = new RowWidget(wsdl);
-	    com.google.gwt.user.client.Element newRow = rw.getElement();
-	    if (newRow != null) {
-		if (i % 2 == 0) {
-		    newRow.addClassName("even");
-		} else {
-		    newRow.addClassName("odd");
-		}
-		panel.add(rw, contentId);
-	    }
-	    i++;
+	rowWidgets = new HashMap<Long, RowWidget>();
+	for (Map.Entry<Long, ServiceWsdl> wsdlEntry : list.entrySet()) {
+	    addRow(wsdlEntry.getKey(), wsdlEntry.getValue());
+	}
+	select(Wise_gui.getInstance().getSelectedWsdlId());
+    }
+
+    private RowWidget addRow(Long id, ServiceWsdl wsdl) {
+	RowWidget rw = new RowWidget(id, wsdl);
+	com.google.gwt.user.client.Element newRow = rw.getElement();
+	assert (newRow != null);
+	if (rowWidgets.size() % 2 == 0) {
+	    newRow.addClassName("even");
+	} else {
+	    newRow.addClassName("odd");
+	}
+	rowWidgets.put(id, rw);
+	panel.add(rw, contentId);
+	return rw;
+    }
+
+    public void refreshRow(Long id) {
+	assert id != null;
+	assert rowWidgets != null;
+	ServiceWsdl wsdl = Wise_gui.getInstance().getWsdlList().get(id);
+	assert wsdl != null;
+	RowWidget rw = rowWidgets.get(id);
+	if (rw != null) {
+	    rw.update(wsdl);
+	} else {
+	    addRow(id, wsdl);
 	}
     }
 
-    void select(RowWidget newSelectedRow) {
+    public void select(RowWidget newSelectedRow) {
 	if (newSelectedRow != selectedRow) {
 	    if (selectedRow != null) {
 		selectedRow.removeStyleName("selected");
@@ -128,8 +150,16 @@ public class WsdlList extends Composite {
 	}
     }
 
+    public void select(Long wsdlId) {
+	if (wsdlId == null) {
+	    select((RowWidget) null);
+	} else {
+	    select(rowWidgets.get(wsdlId));
+	}
+    }
+
     public void enableButtons() {
-	if (Wise_gui.getInstance().getSelectedWsdl() != null) {
+	if (Wise_gui.getInstance().getSelectedWsdlId() != null) {
 	    deleteBtn.setEnabled(true);
 	    editBtn.setEnabled(true);
 	    openBtn.setEnabled(true);
@@ -164,14 +194,35 @@ public class WsdlList extends Composite {
 
     private class RowWidget extends ComplexPanel implements ClickHandler {
 
+	private CellWidget nameWidget;
+
+	private CellWidget descriptionWidget;
+
+	private CellWidget savingDateWidget;
+
+	Long key;
+
 	ServiceWsdl wsdl;
 
-	public RowWidget(ServiceWsdl wsdl) {
+	public RowWidget(Long key, ServiceWsdl wsdl) {
 	    setElement(Document.get().createTRElement());
+	    this.key = key;
 	    this.wsdl = wsdl;
-	    this.add(new CellWidget("20%", wsdl.getName()));
-	    this.add(new CellWidget("60%", wsdl.getName() + ":" + wsdl.getNotes()));
-	    this.add(new CellWidget("20%", format(wsdl.getSavingDate())));
+	    this.nameWidget = new CellWidget("20%", wsdl.getName());
+	    this.descriptionWidget = new CellWidget("60%", wsdl.getNotes());
+	    this.savingDateWidget = new CellWidget("20%", format(wsdl.getSavingDate()));
+	    this.add(nameWidget);
+	    this.add(descriptionWidget);
+	    this.add(savingDateWidget);
+	}
+
+	/**
+	 * @param wsdl
+	 */
+	public void update(ServiceWsdl wsdl) {
+	    nameWidget.setText(wsdl.getName());
+	    descriptionWidget.setText(wsdl.getNotes());
+	    savingDateWidget.setText(format(wsdl.getSavingDate()));
 	}
 
 	/**
@@ -180,7 +231,7 @@ public class WsdlList extends Composite {
 	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
 	public void onClick(ClickEvent event) {
-	    Wise_gui.getInstance().setSelectedWsdl(this.wsdl);
+	    Wise_gui.getInstance().setSelectedWsdlId(this.key);
 	}
 
 	@Override
@@ -198,12 +249,19 @@ public class WsdlList extends Composite {
 	    }
 
 	    /**
+	     * @param text
+	     */
+	    public void setText(String text) {
+		getElement().setInnerText(text);
+	    }
+
+	    /**
 	     * {@inheritDoc}
 	     * 
 	     * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	     */
 	    public void onClick(ClickEvent event) {
-		Wise_gui.getInstance().setSelectedWsdl(RowWidget.this.wsdl);
+		Wise_gui.getInstance().setSelectedWsdlId(RowWidget.this.key);
 		select(RowWidget.this);
 	    }
 
@@ -225,5 +283,4 @@ public class WsdlList extends Composite {
 	}
 
     }
-
 }

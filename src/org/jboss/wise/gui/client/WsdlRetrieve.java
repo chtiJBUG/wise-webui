@@ -21,8 +21,6 @@
  */
 package org.jboss.wise.gui.client;
 
-import org.jboss.wise.gui.shared.ServiceWsdl;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -61,17 +59,13 @@ public class WsdlRetrieve {
 
     private DialogBox dialog;
 
-    private ServiceWsdl wsdl;
-
     public WsdlRetrieve() {
 	dialog = uiBinder.createAndBindUi(this);
 	okBtn.addStyleName("gwt-Button");
     }
 
-    public void show(ServiceWsdl wsdl) {
-	this.wsdl = wsdl;
+    public void show() {
 	if (!dialog.isShowing()) {
-	    wsdlUrl.setInnerText(wsdl.getUrl());
 	    enableButtons();
 	    dialog.center();
 	    dialog.show();

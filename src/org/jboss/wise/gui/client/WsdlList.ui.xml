@@ -43,7 +43,7 @@
 			style="position:absolute;left:0px;top:114px;right:0px;bottom:30px;overflow:hidden;"
 			class='content'>
 			<div
-				style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;overflow:auto;">
+				style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;overflow:scroll;">
 				<table style="width:100%">
 					<tbody ui:field='content' />
 				</table>

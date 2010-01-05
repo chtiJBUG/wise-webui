@@ -23,6 +23,7 @@
 package org.jboss.wise.gui.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -179,6 +180,27 @@ public class Wise_gui implements EntryPoint {
 	}
 	wsdlEditDialog.editServiceWsdl(selectedWsdlId);
 	wsdlEditDialog.show();
+    }
+
+    public void duplicateWsdl() {
+	assert selectedWsdlId != null;
+	assert wsdlList != null;
+	ServiceWsdl wsdl = wsdlList.get(selectedWsdlId);
+	assert wsdl != null;
+	final ServiceWsdl updatedWsdl = new ServiceWsdl(wsdl.getName(), wsdl.getUrl(), wsdl.getNotes(), new Date());
+	wiseService.addWsdl(updatedWsdl, new AsyncCallback<Long>() {
+	    public void onFailure(Throwable caught) {
+		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+	    }
+
+	    public void onSuccess(Long result) {
+		assert result != null;
+		selectedWsdlId = result;
+		wsdlList.put(result, updatedWsdl);
+		wsdlListWidget.refreshRow(result);
+		wsdlListWidget.select(result);
+	    }
+	});
     }
 
     public void saveEditedWsdl() {

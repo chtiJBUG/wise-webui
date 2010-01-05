@@ -55,6 +55,12 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class WsdlList extends Composite {
 
+    private static final String ODD = "odd";
+
+    private static final String EVEN = "even";
+
+    private static final String SELECTED = "selected";
+
     private static WsdlListUiBinder uiBinder = GWT.create(WsdlListUiBinder.class);
 
     interface WsdlListUiBinder extends UiBinder<HTMLPanel, WsdlList> {
@@ -71,6 +77,9 @@ public class WsdlList extends Composite {
 
     @UiField
     Button editBtn;
+
+    @UiField
+    Button duplicateBtn;
 
     @UiField
     Button newBtn;
@@ -115,9 +124,9 @@ public class WsdlList extends Composite {
 	com.google.gwt.user.client.Element newRow = rw.getElement();
 	assert (newRow != null);
 	if (rowWidgets.size() % 2 == 0) {
-	    newRow.addClassName("even");
+	    newRow.addClassName(EVEN);
 	} else {
-	    newRow.addClassName("odd");
+	    newRow.addClassName(ODD);
 	}
 	rowWidgets.put(id, rw);
 	panel.add(rw, contentId);
@@ -140,10 +149,10 @@ public class WsdlList extends Composite {
     public void select(RowWidget newSelectedRow) {
 	if (newSelectedRow != selectedRow) {
 	    if (selectedRow != null) {
-		selectedRow.removeStyleName("selected");
+		selectedRow.removeStyleName(SELECTED);
 	    }
 	    if (newSelectedRow != null) {
-		newSelectedRow.addStyleName("selected");
+		newSelectedRow.addStyleName(SELECTED);
 	    }
 	    selectedRow = newSelectedRow;
 	    enableButtons();
@@ -163,15 +172,17 @@ public class WsdlList extends Composite {
 	    deleteBtn.setEnabled(true);
 	    editBtn.setEnabled(true);
 	    openBtn.setEnabled(true);
+	    duplicateBtn.setEnabled(true);
 	} else {
 	    deleteBtn.setEnabled(false);
 	    editBtn.setEnabled(false);
 	    openBtn.setEnabled(false);
+	    duplicateBtn.setEnabled(false);
 	}
 	newBtn.setEnabled(true);
     }
 
-    @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn" })
+    @UiHandler( { "deleteBtn", "editBtn", "newBtn", "openBtn", "duplicateBtn" })
     void onClick(ClickEvent e) {
 	if (e.getSource() == deleteBtn) {
 	    Alert.caution(Constants.INSTANCE.deleteWsdlMessage(), new Alert.Listener() {
@@ -187,6 +198,8 @@ public class WsdlList extends Composite {
 	    Wise_gui.getInstance().newWsdl();
 	} else if (e.getSource() == openBtn) {
 	    Wise_gui.getInstance().retrieveWsdl();
+	} else if (e.getSource() == duplicateBtn) {
+	    Wise_gui.getInstance().duplicateWsdl();
 	}
     }
 

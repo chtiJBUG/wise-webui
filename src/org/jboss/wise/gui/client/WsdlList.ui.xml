@@ -57,6 +57,7 @@
 					</td>
 					<td style="text-align:right;">
 						<g:Button ui:field='editBtn'>Edit...</g:Button>
+                        <g:Button ui:field='duplicateBtn'>Duplicate</g:Button>
 						<g:Button ui:field='newBtn'>New...</g:Button>
 						<g:Button ui:field='openBtn'>Open</g:Button>
 					</td>

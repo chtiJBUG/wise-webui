@@ -24,7 +24,7 @@
 		</div>
 		<div style="margin-top: 10px;">
 			<div style="width: 100%; text-align:right;">
-				<g:TextBox ui:field='searchBox' visibleLength='30' />
+				<g:TextBox ui:field='searchBox' visibleLength='30' enabled='false'/>
 			</div>
 		</div>
 		<div style="position:absolute;left:0px;top:90px;right:15px;heigth:24px;"

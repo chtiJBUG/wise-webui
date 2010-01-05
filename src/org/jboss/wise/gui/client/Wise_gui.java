@@ -103,7 +103,7 @@ public class Wise_gui implements EntryPoint {
 	assert passwordReminderDialog != null;
 	wiseService.sendReminder(mail, new AsyncCallback<Boolean>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Boolean result) {
@@ -135,7 +135,7 @@ public class Wise_gui implements EntryPoint {
 	assert registerDialog != null;
 	wiseService.register(mail, password, new AsyncCallback<Boolean>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Boolean result) {
@@ -158,7 +158,7 @@ public class Wise_gui implements EntryPoint {
     public void verifyLogin(final String mail, final String password) {
 	wiseService.login(mail, password, new AsyncCallback<Boolean>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Boolean result) {
@@ -187,10 +187,10 @@ public class Wise_gui implements EntryPoint {
 	assert wsdlList != null;
 	ServiceWsdl wsdl = wsdlList.get(selectedWsdlId);
 	assert wsdl != null;
-	final ServiceWsdl updatedWsdl = new ServiceWsdl(wsdl.getName(), wsdl.getUrl(), wsdl.getNotes(), new Date());
+	final ServiceWsdl updatedWsdl = new ServiceWsdl(Constants.INSTANCE.duplicatedWsdlName(wsdl.getName()), wsdl.getUrl(), wsdl.getNotes(), new Date());
 	wiseService.addWsdl(updatedWsdl, new AsyncCallback<Long>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Long result) {
@@ -208,7 +208,7 @@ public class Wise_gui implements EntryPoint {
 	if (wsdlEditDialog.getServiceWsdlId() != null) {
 	    wiseService.updateWsdl(wsdlEditDialog.getServiceWsdlId(), updatedWsdl, new AsyncCallback<Boolean>() {
 		public void onFailure(Throwable caught) {
-		    Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		    Alert.error(Constants.INSTANCE.applicationException(caught));
 		}
 
 		public void onSuccess(Boolean result) {
@@ -225,7 +225,7 @@ public class Wise_gui implements EntryPoint {
 	} else {
 	    wiseService.addWsdl(updatedWsdl, new AsyncCallback<Long>() {
 		public void onFailure(Throwable caught) {
-		    Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		    Alert.error(Constants.INSTANCE.applicationException(caught));
 		}
 
 		public void onSuccess(Long result) {
@@ -257,7 +257,7 @@ public class Wise_gui implements EntryPoint {
 	assert selectedWsdlId != null;
 	wiseService.removeWsdl(selectedWsdlId, new AsyncCallback<Boolean>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Boolean result) {
@@ -281,7 +281,7 @@ public class Wise_gui implements EntryPoint {
 	}
 	wiseService.logout(new AsyncCallback<Void>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Void result) {
@@ -308,7 +308,7 @@ public class Wise_gui implements EntryPoint {
 	}
 	wiseService.getWsdlList(new AsyncCallback<Map<Long, ServiceWsdl>>() {
 	    public void onFailure(Throwable caught) {
-		Alert.error(Constants.INSTANCE.applicationException() + caught.toString());
+		Alert.error(Constants.INSTANCE.applicationException(caught));
 	    }
 
 	    public void onSuccess(Map<Long, ServiceWsdl> result) {

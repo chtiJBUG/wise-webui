@@ -22,11 +22,12 @@
 package org.jboss.wise.gui.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.Messages;
 
 /**
  * @author <a href="mailto:fabri.wise@javamac.com">Fabrizio Di Giuseppe</a>
  */
-public interface Constants extends com.google.gwt.i18n.client.Constants {
+public interface Constants extends Messages {
 
     Constants INSTANCE = GWT.create(Constants.class);
 
@@ -41,6 +42,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
     String warningDialogTitle();
 
     String deleteWsdlMessage();
+
+    String duplicateWsdlMessage();
+
+    String duplicatedWsdlName(String originalName);
 
     String loginError();
 
@@ -58,6 +63,6 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
 
     String newWsdlDialogCaption();
 
-    String applicationException();
+    String applicationException(Throwable caught);
 
 }

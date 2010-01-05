@@ -199,7 +199,13 @@ public class WsdlList extends Composite {
 	} else if (e.getSource() == openBtn) {
 	    Wise_gui.getInstance().retrieveWsdl();
 	} else if (e.getSource() == duplicateBtn) {
-	    Wise_gui.getInstance().duplicateWsdl();
+	    Alert.caution(Constants.INSTANCE.duplicateWsdlMessage(), new Alert.Listener() {
+		public void onReply(Alert origin, Reply r) {
+		    if (r == Alert.Reply.OK) {
+			Wise_gui.getInstance().duplicateWsdl();
+		    }
+		}
+	    });
 	}
     }
 
